@@ -1,0 +1,1860 @@
+ <!doctype html>
+<html lang="ar" dir="rtl">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>منصة الإتقان الذكي — نسخة نهائية</title>
+
+  <!-- Libraries (CDN) -->
+  <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.1/dist/chart.umd.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/docx/8.5.0/docx.umd.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/FileSaver.js/2.0.5/FileSaver.min.js"></script>
+
+  <style>
+    :root{
+      --g1:#0E7A3E; /* أخضر تربوي */
+      --g2:#0B6232;
+      --a:#19A45B;
+      --gold:#C9A227;
+      --bg:#F3F7F4;
+      --card:#FFFFFF;
+      --ink:#0F172A;
+      --mut:#64748B;
+      --line:#DDE7E0;
+      --soft:#E7F3EC;
+      --danger:#B42318;
+      --shadow: 0 14px 28px rgba(15,23,42,.10);
+      --r:18px;
+      --r2:12px;
+    }
+    [data-theme="dark"]{
+      --bg:#0B1220;
+      --card:#0F1B2D;
+      --ink:#E5E7EB;
+      --mut:#A5B4FC;
+      --line:#1F2A3A;
+      --soft:#0B2A1A;
+      --shadow: 0 14px 28px rgba(0,0,0,.35);
+    }
+    *{box-sizing:border-box}
+    body{margin:0;font-family:Tahoma, Arial, sans-serif;background:var(--bg);color:var(--ink)}
+    header{
+      position:sticky;top:0;z-index:9999;
+      background:linear-gradient(135deg,var(--g1),var(--g2));
+      color:#fff;box-shadow:var(--shadow);
+    }
+    .topbar{display:flex;gap:10px;align-items:center;justify-content:space-between;padding:14px 16px;flex-wrap:wrap}
+    .brand{display:flex;flex-direction:column;gap:3px}
+    .brand h1{margin:0;font-size:20px;font-weight:900}
+    .brand .sub{opacity:.9;font-size:12px}
+    .actions{display:flex;gap:8px;flex-wrap:wrap}
+    .pill{
+      border:1px solid rgba(255,255,255,.25);
+      background:rgba(255,255,255,.12);
+      color:#fff;padding:8px 12px;border-radius:999px;
+      cursor:pointer;font-weight:800;
+      display:inline-flex;align-items:center;gap:8px;
+    }
+    .pill:active{transform:scale(.99)}
+    nav{padding:10px 16px 14px;display:flex;gap:8px;flex-wrap:wrap}
+    .tab{
+      background:rgba(255,255,255,.12);
+      border:1px solid rgba(255,255,255,.20);
+      color:#fff;padding:10px 12px;border-radius:999px;
+      cursor:pointer;font-weight:900;display:inline-flex;gap:8px;align-items:center;
+    }
+    .tab.active{background:#fff;color:var(--g1);border-color:#fff}
+    .wrap{max-width:1200px;margin:0 auto;padding:16px}
+    .card{
+      background:var(--card);border:1px solid var(--line);border-radius:var(--r);
+      box-shadow:var(--shadow);padding:16px;
+    }
+    .card.flat{box-shadow:none}
+    .grid{display:grid;grid-template-columns:1.1fr .9fr;gap:14px}
+    @media(max-width:980px){.grid{grid-template-columns:1fr}}
+    .two{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+    @media(max-width:900px){.two{grid-template-columns:1fr}}
+    .row{display:flex;gap:10px;flex-wrap:wrap;align-items:end}
+    .field{flex:1;min-width:180px;display:flex;flex-direction:column;gap:6px}
+    label{font-size:12px;color:var(--mut);font-weight:800}
+    input,select,textarea{
+      width:100%;padding:10px 12px;border-radius:12px;border:1px solid var(--line);
+      background:transparent;color:var(--ink);outline:none;
+    }
+    textarea{min-height:90px;resize:vertical}
+    .btn{
+      background:var(--g1);color:#fff;border:none;border-radius:12px;
+      padding:10px 12px;cursor:pointer;font-weight:900;
+      display:inline-flex;gap:8px;align-items:center;justify-content:center;
+    }
+    .btn.secondary{background:transparent;border:1px solid var(--line);color:var(--ink)}
+    .btn.danger{background:var(--danger)}
+    .btn.gold{background:var(--gold);color:#101010}
+    .btn:active{transform:scale(.99)}
+    .title{display:flex;align-items:center;justify-content:space-between;gap:10px;margin:0 0 10px}
+    .title h2{margin:0;font-size:18px;font-weight:900}
+    .tag{
+      display:inline-flex;align-items:center;gap:8px;
+      background:var(--soft);border:1px solid var(--line);
+      padding:6px 10px;border-radius:999px;font-weight:900;font-size:12px
+    }
+    .hint{
+      background:var(--soft);border:1px dashed rgba(25,164,91,.45);
+      border-radius:16px;padding:10px 12px;
+    }
+    .muted{color:var(--mut)}
+    .hide{display:none!important}
+    table{width:100%;border-collapse:collapse;border:1px solid var(--line);border-radius:14px;overflow:hidden}
+    th,td{border-bottom:1px solid var(--line);padding:10px;text-align:right;vertical-align:top}
+    th{background:var(--soft);font-weight:900}
+    .kpi{display:grid;grid-template-columns:repeat(4,1fr);gap:10px}
+    @media(max-width:900px){.kpi{grid-template-columns:repeat(2,1fr)}}
+    .kpi .box{background:var(--soft);border:1px solid var(--line);border-radius:16px;padding:12px}
+    .kpi .v{font-size:22px;font-weight:900}
+    .kpi .t{font-size:12px;color:var(--mut);font-weight:900}
+    .footer{padding:18px 0;text-align:center;color:var(--mut);font-weight:800}
+    .mono{font-family:ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace}
+    .dangerText{color:var(--danger);font-weight:900}
+    .okText{color:var(--a);font-weight:900}
+    /* مهم: منع مشكلة “ما ينضغط” */
+    *{pointer-events:auto}
+  </style>
+</head>
+
+<body data-theme="light">
+<header>
+  <div class="topbar">
+    <div class="brand">
+      <h1 id="appTitle">منصة الإتقان الذكي</h1>
+      <div class="sub" id="appSub">تفاعلية — حفظ/تعديل/حذف/طباعة/تصدير Word — فترتين + تقارير + خطط + مسابقات</div>
+    </div>
+    <div class="actions">
+      <button class="pill" id="btnTheme">🌓 الوضع</button>
+      <button class="pill" id="btnSave">💾 حفظ</button>
+      <button class="pill" id="btnExport">⬇️ تصدير بيانات</button>
+      <button class="pill" id="btnImport">⬆️ استيراد بيانات</button>
+      <button class="pill" id="btnWord">📝 تصدير Word</button>
+      <button class="pill" id="btnPrint">🖨️ طباعة / PDF</button>
+    </div>
+  </div>
+  <nav id="navTabs">
+    <button class="tab active" data-tab="home">🏠 الرئيسية</button>
+    <button class="tab" data-tab="meta">🧾 البيانات الأساسية</button>
+    <button class="tab" data-tab="classes">🏫 الفصول/الطالبات</button>
+    <button class="tab" data-tab="curr">📘 المادة/الوحدات/الدروس</button>
+    <button class="tab" data-tab="skills">🧠 بنك المهارات</button>
+    <button class="tab" data-tab="grades">🧮 الدرجات (فترتين)</button>
+    <button class="tab" data-tab="plans">🧩 الخطط</button>
+    <button class="tab" data-tab="reports">📊 التحليل والتقارير</button>
+    <button class="tab" data-tab="awards">🏅 التكريم</button>
+    <button class="tab" data-tab="quiz">🎯 المسابقة</button>
+    <button class="tab" data-tab="sources">🔗 المصادر</button>
+    <button class="tab" data-tab="settings">⚙️ الإعدادات</button>
+  </nav>
+</header>
+
+<div class="wrap">
+
+  <!-- HOME -->
+  <section id="tab-home" class="card">
+    <div class="title">
+      <h2>لوحة التحكم</h2>
+      <span class="tag">✅ كل شيء قابل للتعديل والحذف</span>
+    </div>
+
+    <div class="hint">
+      <b>الترتيب الصحيح للاستخدام:</b>
+      1) <b>البيانات الأساسية</b> → 2) <b>الفصول/الطالبات</b> → 3) <b>المادة/الوحدات</b> → 4) <b>المهارات</b> → 5) <b>الدرجات</b> → 6) <b>التقارير والخطط والتكريم</b>.
+      <br><span class="muted">المنصة لا تكتب أسماء من عندها. أنتِ تدخلين الأسماء حسب الفصول.</span>
+    </div>
+
+    <div style="height:12px"></div>
+
+    <div class="kpi">
+      <div class="box"><div class="v" id="kpiClasses">0</div><div class="t">عدد الفصول</div></div>
+      <div class="box"><div class="v" id="kpiStudents">0</div><div class="t">عدد الطالبات</div></div>
+      <div class="box"><div class="v" id="kpiSkills">0</div><div class="t">عدد المهارات</div></div>
+      <div class="box"><div class="v" id="kpiUnits">0</div><div class="t">عدد الوحدات</div></div>
+    </div>
+
+    <div style="height:12px"></div>
+
+    <div class="grid">
+      <div class="card flat">
+        <div class="title"><h2>اختصارات</h2><span class="muted">أزرار تشتغل بالضغط ✅</span></div>
+        <div class="row">
+          <button class="btn" onclick="goTab('meta')">🧾 البيانات الأساسية</button>
+          <button class="btn" onclick="goTab('classes')">🏫 الفصول/الطالبات</button>
+          <button class="btn" onclick="goTab('curr')">📘 المادة/الوحدات</button>
+          <button class="btn" onclick="goTab('skills')">🧠 بنك المهارات</button>
+          <button class="btn" onclick="goTab('grades')">🧮 الدرجات</button>
+          <button class="btn" onclick="goTab('reports')">📊 التقارير</button>
+        </div>
+      </div>
+
+      <div class="card flat">
+        <div class="title"><h2>ملاحظة تشغيل على الآيباد</h2><span class="tag">iPad</span></div>
+        <div class="muted">
+          إذا واجهتِ “نسخة قديمة”: اعملي Refresh مرتين، أو افتحي الرابط في Safari ثم امسحي الكاش (Settings → Safari → Clear History & Website Data).
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- META -->
+  <section id="tab-meta" class="card hide">
+    <div class="title"><h2>البيانات الأساسية</h2><span class="tag">تظهر في التقارير والشهادات</span></div>
+
+    <div class="row">
+      <div class="field"><label>اسم المعلمة</label><input id="mTeacher" placeholder="مثال: سعاد صالح الغامدي"></div>
+      <div class="field"><label>اسم المديرة</label><input id="mLeader" placeholder="مثال: آمال باربود"></div>
+      <div class="field"><label>المدرسة</label><input id="mSchool" placeholder="المتوسطة الثانية والأربعون والثانوية السادسة والثلاثون"></div>
+      <div class="field"><label>العام الدراسي</label><input id="mYear" placeholder="1447"></div>
+    </div>
+
+    <div class="row">
+      <div class="field">
+        <label>المرحلة</label>
+        <select id="mStage">
+          <option value="">اختياري</option>
+          <option>متوسط</option>
+          <option>ثانوي</option>
+        </select>
+      </div>
+      <div class="field">
+        <label>الصف/المستوى</label>
+        <input id="mGrade" placeholder="مثال: ثاني ثانوي / ثاني متوسط">
+      </div>
+      <div class="field">
+        <label>المادة</label>
+        <select id="mSubject" onchange="onSubjectChanged()">
+          <option>توحيد</option>
+          <option>فقه</option>
+          <option>حديث</option>
+          <option>تفسير</option>
+          <option>لغتي</option>
+          <option>رياضيات</option>
+          <option>علوم</option>
+          <option>إنجليزي</option>
+        </select>
+      </div>
+      <div class="field"><label>هدف عام</label><input id="mGoal" placeholder="رفع مستوى الإتقان في المهارات الأساسية"></div>
+    </div>
+
+    <div class="row">
+      <button class="btn" onclick="saveAll()">💾 حفظ البيانات</button>
+      <button class="btn secondary" onclick="fillDefaultMeta()">✨ تعبئة بالبيانات المعطاة (اختياري)</button>
+    </div>
+
+    <div style="height:10px"></div>
+    <div class="hint">
+      <b>حقوق الطبع:</b> تُكتب تلقائيًا أسفل التقارير والشهادات ويمكن تعديلها من الإعدادات.
+    </div>
+  </section>
+
+  <!-- CLASSES -->
+  <section id="tab-classes" class="card hide">
+    <div class="title"><h2>الفصول والطالبات</h2><span class="tag">إضافة/حذف/تعديل</span></div>
+
+    <div class="two">
+      <div class="card flat">
+        <div class="title"><h2>إضافة فصل</h2><span class="muted">مثال: 2ث/1</span></div>
+        <div class="row">
+          <div class="field"><label>اسم الفصل</label><input id="cName" placeholder="اكتبي اسم الفصل"></div>
+          <button class="btn" onclick="addClass()">➕ إضافة</button>
+        </div>
+
+        <div style="height:12px"></div>
+
+        <div class="title"><h2>إضافة طالبات</h2><span class="muted">بدون أسماء جاهزة</span></div>
+        <div class="row">
+          <div class="field"><label>اختر فصل</label><select id="cSel"></select></div>
+          <div class="field"><label>اسم الطالبة</label><input id="sName" placeholder="اكتبي الاسم"></div>
+          <button class="btn" onclick="addStudent()">➕ إضافة</button>
+        </div>
+
+        <div style="height:10px"></div>
+
+        <div class="title"><h2>إضافة دفعة واحدة</h2><span class="muted">كل اسم بسطر</span></div>
+        <div class="field">
+          <label>الصقي الأسماء هنا</label>
+          <textarea id="bulkNames" placeholder="مثال:
+سارة ...
+نورة ...
+..."></textarea>
+        </div>
+        <div class="row">
+          <button class="btn" onclick="bulkAddStudents()">📥 إدخال جماعي</button>
+          <button class="btn secondary" onclick="document.getElementById('bulkNames').value=''">🧹 مسح</button>
+        </div>
+      </div>
+
+      <div class="card flat">
+        <div class="title"><h2>القائمة</h2><span class="muted">تحرير مباشر</span></div>
+        <div id="classesView"></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- CURRICULUM -->
+  <section id="tab-curr" class="card hide">
+    <div class="title"><h2>المادة — الوحدات والدروس</h2><span class="tag">قابلة للتعديل</span></div>
+
+    <div class="hint">
+      هذه الصفحة تتحكم في “هيكلة” المنهج (وحدات/دروس). المهارات تُربط بالوحدة والدرس.
+      <br><span class="muted">إذا تغيّر المنهج سنة جديدة: عدّلي الوحدات/الدروس والمهارات فقط — وتبقى المنصة نفسها.</span>
+    </div>
+
+    <div style="height:12px"></div>
+
+    <div class="two">
+      <div class="card flat">
+        <div class="title"><h2>إضافة وحدة</h2><span class="muted">مثل: الوحدة الأولى</span></div>
+        <div class="row">
+          <div class="field"><label>اسم الوحدة</label><input id="uName" placeholder="اكتبي اسم الوحدة"></div>
+          <button class="btn" onclick="addUnit()">➕ إضافة</button>
+        </div>
+
+        <div style="height:12px"></div>
+
+        <div class="title"><h2>إضافة درس</h2><span class="muted">يرتبط بالوحدة</span></div>
+        <div class="row">
+          <div class="field"><label>اختر وحدة</label><select id="uSel"></select></div>
+          <div class="field"><label>اسم الدرس</label><input id="lName" placeholder="اكتبي اسم الدرس"></div>
+          <button class="btn" onclick="addLesson()">➕ إضافة</button>
+        </div>
+
+        <div style="height:12px"></div>
+        <div class="row">
+          <button class="btn secondary" onclick="seedDefaultCurriculum()">✨ توليد وحدات افتراضية للمادة</button>
+          <button class="btn danger" onclick="clearCurriculum()">🗑️ مسح الوحدات/الدروس</button>
+        </div>
+      </div>
+
+      <div class="card flat">
+        <div class="title"><h2>الوحدات والدروس</h2><span class="muted">تحرير/حذف</span></div>
+        <div id="currView"></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- SKILLS -->
+  <section id="tab-skills" class="card hide">
+    <div class="title"><h2>بنك المهارات</h2><span class="tag">مرن للسنة القادمة</span></div>
+
+    <div class="hint">
+      المهارات هنا هي “القلب”. منها تتولد الخطط + المسابقة + التحليل.
+      <br><span class="muted">حدّدي لكل مهارة: الوحدة + الدرس + اسم المهارة.</span>
+    </div>
+
+    <div style="height:12px"></div>
+
+    <div class="card flat">
+      <div class="title"><h2>إضافة مهارة</h2><span class="muted">تتولد لها خطط تلقائيًا</span></div>
+      <div class="row">
+        <div class="field"><label>الوحدة</label><select id="skUnit"></select></div>
+        <div class="field"><label>الدرس</label><select id="skLesson"></select></div>
+        <div class="field" style="min-width:260px"><label>اسم المهارة</label><input id="skName" placeholder="مثال: تمييز أنواع التوحيد"></div>
+        <button class="btn" onclick="addSkill()">➕ إضافة</button>
+      </div>
+      <div class="row">
+        <button class="btn secondary" onclick="seedDefaultSkills()">✨ توليد مهارات افتراضية للمادة</button>
+        <button class="btn danger" onclick="clearSkills()">🗑️ مسح المهارات</button>
+      </div>
+    </div>
+
+    <div style="height:12px"></div>
+    <div id="skillsView"></div>
+  </section>
+
+  <!-- GRADES -->
+  <section id="tab-grades" class="card hide">
+    <div class="title"><h2>الدرجات — فترتين</h2><span class="tag">تصنيف تلقائي</span></div>
+
+    <div class="row">
+      <div class="field"><label>الفصل</label><select id="gClass"></select></div>
+      <div class="field"><label>المهارة</label><select id="gSkill"></select></div>
+      <div class="field"><label>الفترة</label>
+        <select id="gTerm">
+          <option value="1">الفترة الأولى</option>
+          <option value="2">الفترة الثانية</option>
+        </select>
+      </div>
+      <button class="btn" onclick="renderGradeTable()">عرض الجدول</button>
+    </div>
+
+    <div style="height:12px"></div>
+    <div id="gradeWrap"></div>
+  </section>
+
+  <!-- PLANS -->
+  <section id="tab-plans" class="card hide">
+    <div class="title"><h2>الخطط العلاجية والإثرائية</h2><span class="tag">تتولد حسب المهارة</span></div>
+    <div class="hint">
+      ✅ داخل كل مهارة: خطة علاجية + إثرائية قابلة للتعديل والحذف.  
+      ✅ ويمكن توليد “خطة طالبة” تلقائيًا حسب تصنيفها.
+    </div>
+
+    <div style="height:12px"></div>
+
+    <div class="card flat">
+      <div class="title"><h2>خطة طالبة تلقائية</h2><span class="muted">حسب الفصل/الطالبة/الفترة</span></div>
+      <div class="row">
+        <div class="field"><label>الفصل</label><select id="pClass"></select></div>
+        <div class="field"><label>الطالبة</label><select id="pStudent"></select></div>
+        <div class="field"><label>الفترة</label>
+          <select id="pTerm">
+            <option value="1">الفترة الأولى</option>
+            <option value="2">الفترة الثانية</option>
+          </select>
+        </div>
+        <button class="btn" onclick="buildStudentPlan()">🧩 توليد خطة للطالبة</button>
+      </div>
+      <div style="height:10px"></div>
+      <div id="studentPlanView"></div>
+    </div>
+
+    <div style="height:12px"></div>
+    <div id="plansView"></div>
+  </section>
+
+  <!-- REPORTS -->
+  <section id="tab-reports" class="card hide">
+    <div class="title"><h2>التحليل والتقارير</h2><span class="tag">ف1 + ف2 + مقارنة</span></div>
+
+    <div class="row">
+      <div class="field"><label>الفصل</label><select id="rClass"></select></div>
+      <button class="btn" onclick="buildReports()">📊 توليد تقرير الفصل</button>
+      <button class="btn secondary" onclick="buildAllReports()">📑 تقرير شامل لكل الفصول</button>
+    </div>
+
+    <div style="height:12px"></div>
+    <div id="reportsView"></div>
+  </section>
+
+  <!-- AWARDS -->
+  <section id="tab-awards" class="card hide">
+    <div class="title"><h2>التكريم</h2><span class="tag">شهادة جاهزة</span></div>
+
+    <div class="row">
+      <div class="field"><label>الفصل</label><select id="aClass"></select></div>
+      <div class="field"><label>نوع التكريم</label>
+        <select id="aType">
+          <option value="top">تفوق (أعلى معدل)</option>
+          <option value="improve">أعلى تحسن</option>
+          <option value="mastery">إتقان (90+)</option>
+        </select>
+      </div>
+      <button class="btn gold" onclick="generateAwards()">🏅 توليد التكريم</button>
+      <button class="btn secondary" onclick="window.print()">🖨️ طباعة</button>
+    </div>
+
+    <div style="height:12px"></div>
+    <div id="awardsView"></div>
+  </section>
+
+  <!-- QUIZ -->
+  <section id="tab-quiz" class="card hide">
+    <div class="title"><h2>مسابقة اختيار من متعدد</h2><span class="tag">تتولد من المهارات</span></div>
+
+    <div class="hint">
+      تتولد أسئلة MCQ من المهارات بقوالب جاهزة. بعدها تقدرين تعدلين السؤال والإجابات.
+    </div>
+
+    <div style="height:12px"></div>
+
+    <div class="row">
+      <div class="field"><label>الوحدة</label><select id="qUnit"></select></div>
+      <div class="field"><label>الدرس</label><select id="qLesson"></select></div>
+      <div class="field"><label>عدد الأسئلة</label><input id="qCount" type="number" min="3" max="25" value="10"></div>
+      <button class="btn" onclick="generateQuiz()">🎯 توليد</button>
+      <button class="btn secondary" onclick="window.print()">🖨️ طباعة</button>
+    </div>
+
+    <div style="height:12px"></div>
+    <div id="quizView"></div>
+  </section>
+
+  <!-- SOURCES -->
+  <section id="tab-sources" class="card hide">
+    <div class="title"><h2>المصادر والروابط</h2><span class="tag">قابلة للتعديل</span></div>
+
+    <div class="row">
+      <button class="btn secondary" onclick="seedSources()">✨ إضافة مصادر افتراضية</button>
+      <button class="btn" onclick="addSource()">➕ إضافة مصدر</button>
+    </div>
+
+    <div style="height:12px"></div>
+    <div id="sourcesView"></div>
+  </section>
+
+  <!-- SETTINGS -->
+  <section id="tab-settings" class="card hide">
+    <div class="title"><h2>الإعدادات</h2><span class="tag">تخصيص + حدود التصنيف</span></div>
+
+    <div class="two">
+      <div class="card flat">
+        <div class="title"><h2>حدود التصنيف</h2><span class="muted">تؤثر على التقارير والخطط</span></div>
+        <div class="row">
+          <div class="field"><label>فوق المتوسط (≥)</label><input id="tHigh" type="number" min="0" max="100"></div>
+          <div class="field"><label>ضمن المتوسط (≥)</label><input id="tMid" type="number" min="0" max="100"></div>
+          <div class="field"><label>حد الإتقان (≥)</label><input id="tMastery" type="number" min="0" max="100"></div>
+        </div>
+        <div class="row">
+          <button class="btn" onclick="saveAll()">💾 حفظ</button>
+          <button class="btn secondary" onclick="resetThresholds()">↩️ افتراضي</button>
+        </div>
+      </div>
+
+      <div class="card flat">
+        <div class="title"><h2>هوية وألوان</h2><span class="muted">أخضر تربوي</span></div>
+        <div class="row">
+          <div class="field"><label>اسم المنصة</label><input id="setTitle"></div>
+          <div class="field"><label>حقوق الطبع</label><input id="setCopyright" placeholder="كل الحقوق محفوظة"></div>
+        </div>
+        <div class="row">
+          <div class="field"><label>لون أساسي</label><input id="cG1" type="color"></div>
+          <div class="field"><label>لون ثانوي</label><input id="cG2" type="color"></div>
+          <div class="field"><label>ذهبي التكريم</label><input id="cGold" type="color"></div>
+        </div>
+        <div class="row">
+          <button class="btn" onclick="applyColors()">🎨 تطبيق</button>
+          <button class="btn secondary" onclick="saveAll()">💾 حفظ</button>
+        </div>
+
+        <div style="height:10px"></div>
+        <div class="hint">
+          <b>مهم:</b> “الرابط ما ينحذف حتى لو انحذف من الموقع” غير ممكن تقنيًا.
+          الرابط يعتمد على الاستضافة. الحل الصحيح: احفظي نسخة محلية (Download ZIP) أو احتفظي بالمستودع.
+        </div>
+      </div>
+    </div>
+
+    <div style="height:12px"></div>
+    <div class="card flat">
+      <div class="title"><h2>حذف كل البيانات</h2><span class="dangerText">بحذر</span></div>
+      <div class="row">
+        <button class="btn danger" onclick="resetAll()">🗑️ تصفير شامل</button>
+      </div>
+    </div>
+  </section>
+
+  <div class="footer">
+    <span id="footText">© كل الحقوق محفوظة</span>
+  </div>
+</div>
+
+<script>
+/* =========================
+   STATE + STORAGE
+========================= */
+const STORE_KEY = "smart_mastery_platform_final_v1";
+
+const state = {
+  meta:{
+    title:"منصة الإتقان الذكي",
+    teacher:"",
+    leader:"",
+    school:"",
+    year:"1447",
+    stage:"",
+    grade:"",
+    subject:"توحيد",
+    goal:"رفع مستوى الإتقان في المهارات الأساسية",
+    theme:"light",
+    thresholds:{ high:85, mid:60, mastery:90 },
+    colors:{ g1:"#0E7A3E", g2:"#0B6232", gold:"#C9A227" },
+    copyright:"© كل الحقوق محفوظة"
+  },
+  classes:[],      // {id,name}
+  students:[],     // {id,classId,name}
+  curriculum:{     // units + lessons
+    units:[]       // {id,name,lessons:[{id,name}]}
+  },
+  skills:[],       // {id,unitId,lessonId,name,plans:{remedial:[],enrich:[]}}
+  grades:{},       // key studentId_skillId => {t1:null|num, t2:null|num}
+  sources:[]       // {id,name,url}
+};
+
+const uid=()=>Math.random().toString(16).slice(2)+Date.now().toString(16);
+
+function saveSilent(){ localStorage.setItem(STORE_KEY, JSON.stringify(state)); }
+function load(){
+  const raw = localStorage.getItem(STORE_KEY);
+  if(raw){
+    try{
+      const obj = JSON.parse(raw);
+      Object.assign(state, obj);
+    }catch(e){}
+  }
+  applyTheme(state.meta.theme||"light");
+  applyColorsToRoot(state.meta.colors||state.meta.colors);
+  syncMetaToUI();
+  refreshAll();
+}
+function resetAll(){
+  if(!confirm("تأكيد التصفير الشامل؟ سيتم حذف كل البيانات من هذا الجهاز.")) return;
+  localStorage.removeItem(STORE_KEY);
+  location.reload();
+}
+
+/* =========================
+   NAV
+========================= */
+function goTab(tab){
+  document.querySelectorAll(".tab").forEach(b=>b.classList.remove("active"));
+  document.querySelectorAll("section[id^='tab-']").forEach(s=>s.classList.add("hide"));
+  document.querySelector(`.tab[data-tab="${tab}"]`)?.classList.add("active");
+  document.getElementById(`tab-${tab}`)?.classList.remove("hide");
+  window.scrollTo({top:0,behavior:"smooth"});
+}
+document.getElementById("navTabs").addEventListener("click",(e)=>{
+  const btn = e.target.closest(".tab");
+  if(!btn) return;
+  goTab(btn.dataset.tab);
+});
+
+/* =========================
+   THEME + COLORS
+========================= */
+function applyTheme(t){
+  state.meta.theme = t;
+  document.body.setAttribute("data-theme", t);
+  saveSilent();
+}
+document.getElementById("btnTheme").addEventListener("click", ()=>{
+  applyTheme(state.meta.theme==="dark" ? "light":"dark");
+});
+function applyColorsToRoot(c){
+  const r=document.documentElement;
+  r.style.setProperty("--g1", c.g1);
+  r.style.setProperty("--g2", c.g2);
+  r.style.setProperty("--gold", c.gold);
+}
+function applyColors(){
+  state.meta.colors.g1 = document.getElementById("cG1").value;
+  state.meta.colors.g2 = document.getElementById("cG2").value;
+  state.meta.colors.gold = document.getElementById("cGold").value;
+  applyColorsToRoot(state.meta.colors);
+  saveAll();
+}
+
+/* =========================
+   ACTION BUTTONS
+========================= */
+document.getElementById("btnSave").addEventListener("click", saveAll);
+
+document.getElementById("btnExport").addEventListener("click", ()=>{
+  saveAll();
+  const blob = new Blob([JSON.stringify(state,null,2)], {type:"application/json"});
+  saveAs(blob, `${(state.meta.title||"platform")}_${state.meta.year||""}.json`);
+});
+
+document.getElementById("btnImport").addEventListener("click", ()=>{
+  const inp=document.createElement("input");
+  inp.type="file"; inp.accept="application/json";
+  inp.onchange=async()=>{
+    const f=inp.files?.[0]; if(!f) return;
+    const txt=await f.text();
+    try{
+      const obj=JSON.parse(txt);
+      Object.assign(state,obj);
+      saveSilent();
+      syncMetaToUI();
+      refreshAll();
+      alert("تم الاستيراد ✅");
+    }catch(e){
+      alert("ملف غير صالح");
+    }
+  };
+  inp.click();
+});
+
+document.getElementById("btnPrint").addEventListener("click", ()=>window.print());
+document.getElementById("btnWord").addEventListener("click", exportWord);
+
+/* =========================
+   META
+========================= */
+function fillDefaultMeta(){
+  // تعبئة حسب بياناتك التي كتبتِها سابقًا (اختياري)
+  state.meta.teacher = "سعاد صالح الغامدي";
+  state.meta.leader = "آمال باربود";
+  state.meta.school = "المدرسة المتوسطة الثانيه والأربعون والثانوية السادسة والثلاثون";
+  state.meta.year = "1447";
+  state.meta.stage = "ثانوي";
+  state.meta.grade = "ثاني ثانوي";
+  state.meta.subject = "توحيد";
+  state.meta.goal = "رفع مستوى الإتقان في المهارات الأساسية";
+  saveAll();
+}
+
+function syncMetaToUI(){
+  // header
+  document.getElementById("appTitle").textContent = state.meta.title || "منصة الإتقان الذكي";
+  document.getElementById("footText").textContent = state.meta.copyright || "© كل الحقوق محفوظة";
+
+  // meta inputs
+  setVal("mTeacher", state.meta.teacher);
+  setVal("mLeader", state.meta.leader);
+  setVal("mSchool", state.meta.school);
+  setVal("mYear", state.meta.year);
+  setSel("mStage", state.meta.stage);
+  setVal("mGrade", state.meta.grade);
+  setSel("mSubject", state.meta.subject);
+  setVal("mGoal", state.meta.goal);
+
+  // settings
+  setVal("tHigh", state.meta.thresholds.high);
+  setVal("tMid", state.meta.thresholds.mid);
+  setVal("tMastery", state.meta.thresholds.mastery);
+  setVal("setTitle", state.meta.title);
+  setVal("setCopyright", state.meta.copyright);
+
+  setVal("cG1", state.meta.colors.g1);
+  setVal("cG2", state.meta.colors.g2);
+  setVal("cGold", state.meta.colors.gold);
+}
+
+function saveAll(){
+  // meta
+  state.meta.teacher = val("mTeacher");
+  state.meta.leader  = val("mLeader");
+  state.meta.school  = val("mSchool");
+  state.meta.year    = val("mYear","1447");
+  state.meta.stage   = valSel("mStage");
+  state.meta.grade   = val("mGrade");
+  state.meta.subject = valSel("mSubject","توحيد");
+  state.meta.goal    = val("mGoal");
+
+  // thresholds
+  state.meta.thresholds.high = num("tHigh",85);
+  state.meta.thresholds.mid  = num("tMid",60);
+  state.meta.thresholds.mastery = num("tMastery",90);
+
+  // settings
+  state.meta.title = val("setTitle", state.meta.title);
+  state.meta.copyright = val("setCopyright", state.meta.copyright);
+
+  // apply
+  document.getElementById("appTitle").textContent = state.meta.title || "منصة الإتقان الذكي";
+  document.getElementById("footText").textContent = state.meta.copyright || "© كل الحقوق محفوظة";
+
+  saveSilent();
+  refreshAll();
+  alert("تم الحفظ ✅");
+}
+
+function resetThresholds(){
+  state.meta.thresholds = {high:85, mid:60, mastery:90};
+  saveAll();
+}
+
+function onSubjectChanged(){
+  // عند تغيير المادة: يمكن توليد وحدات/مهارات افتراضية بالزر
+  saveSilent();
+}
+
+function val(id,fallback=""){
+  const el=document.getElementById(id);
+  if(!el) return fallback;
+  return (el.value??"").trim() || fallback;
+}
+function valSel(id,fallback=""){
+  const el=document.getElementById(id);
+  if(!el) return fallback;
+  return el.value ?? fallback;
+}
+function num(id,fallback){
+  const el=document.getElementById(id);
+  if(!el) return fallback;
+  const n=Number(el.value);
+  return Number.isFinite(n)? n : fallback;
+}
+function setVal(id,v){ const el=document.getElementById(id); if(el && v!=null) el.value=v; }
+function setSel(id,v){ const el=document.getElementById(id); if(el && v!=null) el.value=v; }
+
+/* =========================
+   CLASSES + STUDENTS
+========================= */
+function addClass(){
+  const name = val("cName");
+  if(!name) return alert("اكتبي اسم الفصل");
+  state.classes.push({id:uid(), name});
+  document.getElementById("cName").value="";
+  saveSilent();
+  refreshAll();
+}
+function addStudent(){
+  const classId = valSel("cSel");
+  const name = val("sName");
+  if(!classId) return alert("اختاري فصل");
+  if(!name) return alert("اكتبي اسم الطالبة");
+  state.students.push({id:uid(), classId, name});
+  document.getElementById("sName").value="";
+  saveSilent();
+  refreshAll();
+}
+function bulkAddStudents(){
+  const classId = valSel("cSel");
+  if(!classId) return alert("اختاري فصل");
+  const txt = (document.getElementById("bulkNames").value||"").trim();
+  if(!txt) return alert("الصقي الأسماء أولاً");
+  const names = txt.split("\n").map(s=>s.trim()).filter(Boolean);
+  names.forEach(n=> state.students.push({id:uid(), classId, name:n}));
+  document.getElementById("bulkNames").value="";
+  saveSilent();
+  refreshAll();
+}
+function deleteClass(classId){
+  if(!confirm("حذف الفصل سيحذف الطالبات التابعة له ودرجاتهن. متابعة؟")) return;
+  const removedStudents = state.students.filter(s=>s.classId===classId).map(s=>s.id);
+  state.classes = state.classes.filter(c=>c.id!==classId);
+  state.students = state.students.filter(s=>s.classId!==classId);
+  // remove grades
+  for(const k of Object.keys(state.grades)){
+    const sid = k.split("_")[0];
+    if(removedStudents.includes(sid)) delete state.grades[k];
+  }
+  saveSilent(); refreshAll();
+}
+function deleteStudent(studentId){
+  if(!confirm("حذف الطالبة؟")) return;
+  state.students = state.students.filter(s=>s.id!==studentId);
+  for(const k of Object.keys(state.grades)){
+    const sid = k.split("_")[0];
+    if(sid===studentId) delete state.grades[k];
+  }
+  saveSilent(); refreshAll();
+}
+function editClassName(classId,v){
+  const c=state.classes.find(x=>x.id===classId); if(!c) return;
+  c.name=v; saveSilent();
+}
+function editStudentName(studentId,v){
+  const s=state.students.find(x=>x.id===studentId); if(!s) return;
+  s.name=v; saveSilent();
+}
+
+/* =========================
+   CURRICULUM
+========================= */
+function addUnit(){
+  const name = val("uName");
+  if(!name) return alert("اكتبي اسم الوحدة");
+  state.curriculum.units.push({id:uid(), name, lessons:[]});
+  document.getElementById("uName").value="";
+  saveSilent(); refreshAll();
+}
+function addLesson(){
+  const unitId = valSel("uSel");
+  const name = val("lName");
+  if(!unitId) return alert("اختاري وحدة");
+  if(!name) return alert("اكتبي اسم الدرس");
+  const u = state.curriculum.units.find(x=>x.id===unitId);
+  if(!u) return;
+  u.lessons.push({id:uid(), name});
+  document.getElementById("lName").value="";
+  saveSilent(); refreshAll();
+}
+function deleteUnit(unitId){
+  if(!confirm("حذف الوحدة سيحذف الدروس والمهارات التابعة لها. متابعة؟")) return;
+  state.curriculum.units = state.curriculum.units.filter(u=>u.id!==unitId);
+  // delete related skills + grades
+  const skillIds = state.skills.filter(s=>s.unitId===unitId).map(s=>s.id);
+  state.skills = state.skills.filter(s=>s.unitId!==unitId);
+  for(const k of Object.keys(state.grades)){
+    const sk = k.split("_")[1];
+    if(skillIds.includes(sk)) delete state.grades[k];
+  }
+  saveSilent(); refreshAll();
+}
+function deleteLesson(unitId, lessonId){
+  if(!confirm("حذف الدرس سيحذف المهارات التابعة له. متابعة؟")) return;
+  const u = state.curriculum.units.find(x=>x.id===unitId);
+  if(!u) return;
+  u.lessons = u.lessons.filter(l=>l.id!==lessonId);
+  const skillIds = state.skills.filter(s=>s.lessonId===lessonId).map(s=>s.id);
+  state.skills = state.skills.filter(s=>s.lessonId!==lessonId);
+  for(const k of Object.keys(state.grades)){
+    const sk = k.split("_")[1];
+    if(skillIds.includes(sk)) delete state.grades[k];
+  }
+  saveSilent(); refreshAll();
+}
+function editUnitName(unitId,v){
+  const u=state.curriculum.units.find(x=>x.id===unitId); if(!u) return;
+  u.name=v; saveSilent();
+}
+function editLessonName(unitId, lessonId, v){
+  const u=state.curriculum.units.find(x=>x.id===unitId);
+  const l=u?.lessons?.find(x=>x.id===lessonId);
+  if(!l) return;
+  l.name=v; saveSilent();
+}
+function clearCurriculum(){
+  if(!confirm("مسح جميع الوحدات والدروس؟")) return;
+  state.curriculum.units=[];
+  // also clear skills + grades
+  state.skills=[];
+  state.grades={};
+  saveSilent(); refreshAll();
+}
+
+function seedDefaultCurriculum(){
+  // افتراضي حسب المادة (تقدرين تعدلين بعدين)
+  const subj = state.meta.subject || "توحيد";
+  state.curriculum.units = [];
+  const make = (units)=>units.map(u=>({id:uid(), name:u.name, lessons:u.lessons.map(l=>({id:uid(), name:l}))}));
+  if(subj==="توحيد"){
+    state.curriculum.units = make([
+      {name:"الوحدة الأولى: العقيدة الإسلامية", lessons:["مفهوم العقيدة","أهمية العقيدة","مصادر العقيدة"]},
+      {name:"الوحدة الثانية: توحيد الربوبية", lessons:["معنى الربوبية","دلائل الربوبية"]},
+      {name:"الوحدة الثالثة: توحيد الألوهية والعبادة", lessons:["معنى العبادة","شروط العبادة"]},
+      {name:"الوحدة الرابعة: الأسماء والصفات", lessons:["القاعدة العامة","التمثيل والتعطيل"]},
+      {name:"الوحدة الخامسة: ما ينافي التوحيد", lessons:["الشرك","النفاق","السحر"]},
+      {name:"الوحدة السادسة: حقوق النبي ﷺ", lessons:["محبة النبي","طاعة النبي"]},
+      {name:"الوحدة السابعة: نعمة التوحيد", lessons:["آثار التوحيد","الوحدة والاجتماع"]}
+    ]);
+  }else{
+    state.curriculum.units = make([
+      {name:`الوحدة الأولى (${subj})`, lessons:["الدرس الأول","الدرس الثاني"]},
+      {name:`الوحدة الثانية (${subj})`, lessons:["الدرس الثالث","الدرس الرابع"]}
+    ]);
+  }
+  saveSilent(); refreshAll();
+  alert("تم توليد وحدات افتراضية ✅ (قابلة للتعديل)");
+}
+
+/* =========================
+   SKILLS + PLANS
+========================= */
+function defaultPlansForSkill(skillName){
+  const s = skillName;
+  return {
+    remedial:[
+      `تمهيد مبسط لمفهوم: ${s} (3 دقائق) + مثال واحد.`,
+      `ورقة علاجية قصيرة (5 أسئلة) لتثبيت ${s}.`,
+      `تصحيح الخطأ الشائع في ${s} مع نموذج إجابة.`,
+      `تطبيق موجّه (عمل جماعي) ثم تطبيق فردي في ${s}.`,
+      `واجب علاجي منزلي + متابعة سريعة للحصة القادمة.`
+    ],
+    enrich:[
+      `نشاط إثرائي: سؤال تفكير عليا يربط ${s} بحياة الطالبة.`,
+      `خريطة مفاهيم/ملخص بصري عن ${s}.`,
+      `تحدي إثرائي: مثالان من الواقع على ${s} مع تفسير.`,
+      `مسابقة سريعة (5 أسئلة) للمتقنات في ${s}.`,
+      `مهمة تعلم ذاتي (قراءة قصيرة) + 3 أسئلة تأملية عن ${s}.`
+    ]
+  };
+}
+function addSkill(){
+  const unitId = valSel("skUnit");
+  const lessonId = valSel("skLesson");
+  const name = val("skName");
+  if(!unitId) return alert("اختاري وحدة");
+  if(!lessonId) return alert("اختاري درس");
+  if(!name) return alert("اكتبي اسم المهارة");
+  state.skills.push({id:uid(), unitId, lessonId, name, plans: defaultPlansForSkill(name)});
+  document.getElementById("skName").value="";
+  saveSilent(); refreshAll();
+}
+function editSkillName(skillId,v){
+  const sk=state.skills.find(x=>x.id===skillId); if(!sk) return;
+  sk.name=v;
+  // لا نغيّر الخطط تلقائياً حتى لا نفقد تعديلك
+  saveSilent();
+}
+function deleteSkill(skillId){
+  if(!confirm("حذف المهارة سيحذف درجاتها. متابعة؟")) return;
+  state.skills = state.skills.filter(s=>s.id!==skillId);
+  for(const k of Object.keys(state.grades)){
+    const sk = k.split("_")[1];
+    if(sk===skillId) delete state.grades[k];
+  }
+  saveSilent(); refreshAll();
+}
+function clearSkills(){
+  if(!confirm("مسح جميع المهارات؟")) return;
+  state.skills=[];
+  state.grades={};
+  saveSilent(); refreshAll();
+}
+function seedDefaultSkills(){
+  if(!state.curriculum.units.length) return alert("ولّدي/أضيفي وحدات ودروس أولًا");
+  const subj = state.meta.subject || "توحيد";
+  // اختيار أول وحدة/درس بشكل ذكي إن لم توجد
+  const pickLessonId = (u)=>u.lessons?.[0]?.id;
+  const add = (unitIdx, lessonIdx, names)=>{
+    const u = state.curriculum.units[unitIdx] || state.curriculum.units[0];
+    const l = u.lessons?.[lessonIdx] || u.lessons?.[0];
+    if(!u || !l) return;
+    names.forEach(n=>{
+      state.skills.push({id:uid(), unitId:u.id, lessonId:l.id, name:n, plans: defaultPlansForSkill(n)});
+    });
+  };
+
+  state.skills=[]; state.grades={};
+  if(subj==="توحيد"){
+    add(0,0,["تعريف العقيدة وأهميتها","مصادر العقيدة الصحيحة","منهج أهل السنة"]);
+    add(1,0,["تمييز توحيد الربوبية","الاستدلال على الربوبية"]);
+    add(2,0,["معنى العبادة","شروط قبول العبادة","الفرق بين الشرك الأكبر والأصغر"]);
+    add(4,0,["أمثلة على الشرك","أمثلة على النفاق","خطر السحر والاستعانة بغير الله"]);
+  }else{
+    add(0,0,[`مهارة 1 في ${subj}`,`مهارة 2 في ${subj}`,`مهارة 3 في ${subj}`]);
+  }
+  saveSilent(); refreshAll();
+  alert("تم توليد مهارات افتراضية ✅ (قابلة للتعديل)");
+}
+function editPlan(skillId, type, idx, v){
+  const sk=state.skills.find(x=>x.id===skillId); if(!sk) return;
+  sk.plans[type][idx]=v; saveSilent();
+}
+function addPlanLine(skillId, type){
+  const txt = prompt("اكتبي بند جديد:");
+  if(!txt) return;
+  const sk=state.skills.find(x=>x.id===skillId); if(!sk) return;
+  sk.plans[type].push(txt); saveSilent(); refreshAll();
+}
+function delPlanLine(skillId, type, idx){
+  const sk=state.skills.find(x=>x.id===skillId); if(!sk) return;
+  sk.plans[type].splice(idx,1); saveSilent(); refreshAll();
+}
+
+/* =========================
+   GRADES + CLASSIFICATION
+========================= */
+function gKey(studentId, skillId){ return `${studentId}_${skillId}`; }
+function setGrade(studentId, skillId, term, value){
+  const k=gKey(studentId, skillId);
+  if(!state.grades[k]) state.grades[k]={t1:null,t2:null};
+  const n = value==="" ? null : Number(value);
+  if(term==="1") state.grades[k].t1 = Number.isFinite(n)? n : null;
+  else state.grades[k].t2 = Number.isFinite(n)? n : null;
+  saveSilent();
+}
+function classify(x){
+  if(x==null || isNaN(x)) return {label:"—", icon:"➖"};
+  const {high, mid} = state.meta.thresholds;
+  if(x>=high) return {label:"فوق المتوسط", icon:"🟢"};
+  if(x>=mid)  return {label:"ضمن المتوسط", icon:"🟡"};
+  return {label:"دون المتوسط", icon:"🔴"};
+}
+function isMastery(x){
+  const m=state.meta.thresholds.mastery;
+  return (x!=null && x>=m);
+}
+
+function renderGradeTable(){
+  const classId = valSel("gClass");
+  const skillId = valSel("gSkill");
+  const term = valSel("gTerm");
+  if(!classId) return alert("اختاري فصل");
+  if(!skillId) return alert("اختاري مهارة");
+  const students = state.students.filter(s=>s.classId===classId);
+  if(!students.length) return alert("لا توجد طالبات في هذا الفصل");
+
+  const sk = state.skills.find(x=>x.id===skillId);
+  const rows = students.map(st=>{
+    const g = state.grades[gKey(st.id, skillId)] || {t1:null,t2:null};
+    const v = term==="1" ? g.t1 : g.t2;
+    const c = classify(v);
+    return `
+      <tr>
+        <td><b>${esc(st.name)}</b></td>
+        <td style="min-width:180px">
+          <input type="number" min="0" max="100" value="${v==null?"":v}"
+            oninput="setGrade('${st.id}','${skillId}','${term}', this.value)" />
+        </td>
+        <td><span class="tag">${c.icon} ${c.label}</span></td>
+      </tr>`;
+  }).join("");
+
+  document.getElementById("gradeWrap").innerHTML = `
+    <div class="card flat">
+      <div class="title">
+        <h2>إدخال درجات: <span class="tag">${esc(sk?.name||"")}</span></h2>
+        <span class="tag">الفترة ${term}</span>
+      </div>
+      <table>
+        <thead><tr><th>الطالبة</th><th>الدرجة /100</th><th>التصنيف</th></tr></thead>
+        <tbody>${rows}</tbody>
+      </table>
+      <div class="row" style="margin-top:10px">
+        <button class="btn" onclick="saveAll()">💾 حفظ</button>
+      </div>
+    </div>
+  `;
+}
+
+/* =========================
+   REPORTS + CHARTS
+========================= */
+let chart1=null, chart2=null;
+
+function avg(arr){
+  if(!arr.length) return null;
+  return arr.reduce((a,b)=>a+b,0)/arr.length;
+}
+function classOverallAvg(classId, term){
+  const students = state.students.filter(s=>s.classId===classId);
+  const vals=[];
+  for(const st of students){
+    for(const sk of state.skills){
+      const g = state.grades[gKey(st.id, sk.id)];
+      const v = term===1 ? g?.t1 : g?.t2;
+      if(v!=null) vals.push(v);
+    }
+  }
+  return avg(vals);
+}
+function skillStatsForClass(classId, skillId){
+  const students = state.students.filter(s=>s.classId===classId);
+  const t1=[], t2=[];
+  let c1={high:0,mid:0,low:0,total:0}, c2={high:0,mid:0,low:0,total:0};
+  for(const st of students){
+    const g=state.grades[gKey(st.id, skillId)];
+    const v1=g?.t1, v2=g?.t2;
+    if(v1!=null){
+      t1.push(v1); c1.total++;
+      const lab=classify(v1).label;
+      if(lab==="فوق المتوسط") c1.high++; else if(lab==="ضمن المتوسط") c1.mid++; else c1.low++;
+    }
+    if(v2!=null){
+      t2.push(v2); c2.total++;
+      const lab=classify(v2).label;
+      if(lab==="فوق المتوسط") c2.high++; else if(lab==="ضمن المتوسط") c2.mid++; else c2.low++;
+    }
+  }
+  return {avg1:avg(t1), avg2:avg(t2), c1, c2};
+}
+
+function buildReports(){
+  const classId = valSel("rClass");
+  if(!classId) return alert("اختاري فصل");
+  const c = state.classes.find(x=>x.id===classId);
+  const students = state.students.filter(s=>s.classId===classId);
+  if(!students.length) return alert("لا توجد طالبات");
+  if(!state.skills.length) return alert("لا توجد مهارات");
+
+  const ov1 = classOverallAvg(classId,1);
+  const ov2 = classOverallAvg(classId,2);
+  const improv = (ov1!=null && ov2!=null) ? (ov2-ov1) : null;
+
+  // table per skill
+  const rows = state.skills.map(sk=>{
+    const st=skillStatsForClass(classId, sk.id);
+    return {sk, ...st};
+  });
+
+  // strongest/weakest based on avg2 then avg1
+  const scored = rows.map(r=>{
+    const v = (r.avg2!=null)? r.avg2 : r.avg1;
+    return {name:r.sk.name, v:(v==null?-1:v)};
+  }).filter(x=>x.v>=0).sort((a,b)=>b.v-a.v);
+
+  const strengths = scored.slice(0,3).map(x=>`• ${esc(x.name)} (متوسط ${x.v.toFixed(1)})`).join("<br>") || "—";
+  const weaknesses = scored.slice(-3).filter(x=>x.v>=0).map(x=>`• ${esc(x.name)} (متوسط ${x.v.toFixed(1)})`).join("<br>") || "—";
+
+  const overallText = (improv==null)
+    ? "لا توجد بيانات كافية للمقارنة بين الفترتين."
+    : (improv>=0
+        ? `يوجد تحسن عام بمقدار ${improv.toFixed(1)} درجة بين الفترتين.`
+        : `يوجد انخفاض عام بمقدار ${Math.abs(improv).toFixed(1)} درجة بين الفترتين.`);
+
+  // chart datasets (overall distribution for term2)
+  const dist = {high:0, mid:0, low:0};
+  for(const st of students){
+    const a2 = avg(state.skills.map(sk=>{
+      const g=state.grades[gKey(st.id, sk.id)];
+      return g?.t2!=null ? g.t2 : null;
+    }).filter(v=>v!=null));
+    if(a2==null) continue;
+    const lab=classify(a2).label;
+    if(lab==="فوق المتوسط") dist.high++;
+    else if(lab==="ضمن المتوسط") dist.mid++;
+    else dist.low++;
+  }
+
+  const tableHtml = rows.map(r=>{
+    return `
+      <tr>
+        <td><b>${esc(r.sk.name)}</b></td>
+        <td>${fmt(r.avg1)}</td>
+        <td>${fmt(r.avg2)}</td>
+        <td class="muted">
+          ف1: 🟢 ${r.c1.high} | 🟡 ${r.c1.mid} | 🔴 ${r.c1.low} (من ${r.c1.total})
+          <br>
+          ف2: 🟢 ${r.c2.high} | 🟡 ${r.c2.mid} | 🔴 ${r.c2.low} (من ${r.c2.total})
+        </td>
+      </tr>`;
+  }).join("");
+
+  document.getElementById("reportsView").innerHTML = `
+    <div class="card flat">
+      <div class="title"><h2>تقرير الفصل: <span class="tag">${esc(c?.name||"")}</span></h2><span class="tag">قابل للطباعة</span></div>
+      <div class="row">
+        <span class="tag">متوسط ف1: <b>${fmt(ov1)}</b></span>
+        <span class="tag">متوسط ف2: <b>${fmt(ov2)}</b></span>
+        <span class="tag">التحسن: <b>${improv==null?"—":(improv>=0?("+"+improv.toFixed(1)):improv.toFixed(1))}</b></span>
+      </div>
+      <div style="height:10px"></div>
+      <div class="hint"><b>ملخص:</b> ${overallText}</div>
+    </div>
+
+    <div style="height:12px"></div>
+
+    <div class="two">
+      <div class="card flat">
+        <div class="title"><h2>أقوى مهارات</h2><span class="tag">⭐</span></div>
+        <div class="hint">${strengths}</div>
+      </div>
+      <div class="card flat">
+        <div class="title"><h2>أولويات علاجية</h2><span class="tag">🩺</span></div>
+        <div class="hint">${weaknesses}</div>
+      </div>
+    </div>
+
+    <div style="height:12px"></div>
+
+    <div class="card flat">
+      <div class="title"><h2>تحليل المهارات</h2><span class="muted">متوسط + تصنيف</span></div>
+      <table>
+        <thead><tr><th>المهارة</th><th>متوسط ف1</th><th>متوسط ف2</th><th>التوزيع</th></tr></thead>
+        <tbody>${tableHtml}</tbody>
+      </table>
+    </div>
+
+    <div style="height:12px"></div>
+
+    <div class="two">
+      <div class="card flat">
+        <div class="title"><h2>مخطط تصنيف الطالبات (ف2)</h2><span class="muted">حسب متوسط الطالبة</span></div>
+        <canvas id="chartDist" height="220"></canvas>
+      </div>
+      <div class="card flat">
+        <div class="title"><h2>مخطط متوسط المهارات</h2><span class="muted">ف2</span></div>
+        <canvas id="chartSkills" height="220"></canvas>
+      </div>
+    </div>
+  `;
+
+  // charts
+  const ctx1 = document.getElementById("chartDist");
+  const ctx2 = document.getElementById("chartSkills");
+
+  if(chart1) chart1.destroy();
+  if(chart2) chart2.destroy();
+
+  chart1 = new Chart(ctx1, {
+    type:"doughnut",
+    data:{
+      labels:["فوق المتوسط","ضمن المتوسط","دون المتوسط"],
+      datasets:[{data:[dist.high, dist.mid, dist.low]}]
+    },
+    options:{responsive:true, plugins:{legend:{position:"bottom"}}}
+  });
+
+  const topSkill = rows.map(r=>({name:r.sk.name, v:(r.avg2==null?0:r.avg2)}));
+  chart2 = new Chart(ctx2, {
+    type:"bar",
+    data:{
+      labels: topSkill.map(x=>x.name),
+      datasets:[{label:"متوسط ف2", data: topSkill.map(x=>x.v)}]
+    },
+    options:{
+      responsive:true,
+      plugins:{legend:{display:false}},
+      scales:{y:{min:0,max:100}}
+    }
+  });
+}
+
+function buildAllReports(){
+  if(!state.classes.length) return alert("لا توجد فصول");
+  if(!state.skills.length) return alert("لا توجد مهارات");
+  const blocks = state.classes.map(c=>{
+    const ov1=classOverallAvg(c.id,1);
+    const ov2=classOverallAvg(c.id,2);
+    const imp=(ov1!=null && ov2!=null)? (ov2-ov1): null;
+    return `
+      <tr>
+        <td><b>${esc(c.name)}</b></td>
+        <td>${fmt(ov1)}</td>
+        <td>${fmt(ov2)}</td>
+        <td>${imp==null?"—":(imp>=0?("+"+imp.toFixed(1)):imp.toFixed(1))}</td>
+      </tr>`;
+  }).join("");
+
+  document.getElementById("reportsView").innerHTML = `
+    <div class="card flat">
+      <div class="title"><h2>تقرير شامل لكل الفصول</h2><span class="tag">الفترتين</span></div>
+      <table>
+        <thead><tr><th>الفصل</th><th>متوسط ف1</th><th>متوسط ف2</th><th>التحسن</th></tr></thead>
+        <tbody>${blocks}</tbody>
+      </table>
+      <div style="height:10px"></div>
+      <div class="hint">
+        <b>توصية إدارية:</b> دعم الفصول الأقل تحسنًا بخطة علاجية مركزة، وتكريم الفصول الأعلى تحسنًا.
+      </div>
+    </div>
+  `;
+}
+
+/* =========================
+   PLANS: STUDENT PLAN
+========================= */
+function buildStudentPlan(){
+  const classId = valSel("pClass");
+  const studentId = valSel("pStudent");
+  const term = Number(valSel("pTerm"));
+  if(!classId || !studentId) return alert("اختاري الفصل والطالبة");
+  if(!state.skills.length) return alert("لا توجد مهارات");
+
+  const st = state.students.find(x=>x.id===studentId);
+  const items = state.skills.map(sk=>{
+    const g = state.grades[gKey(studentId, sk.id)];
+    const v = term===1 ? g?.t1 : g?.t2;
+    const c = classify(v);
+    let planType = "enrich";
+    if(c.label==="دون المتوسط") planType = "remedial";
+    else if(c.label==="ضمن المتوسط") planType = "remedial"; // دعم خفيف
+    else planType = "enrich";
+
+    const lines = (planType==="remedial" ? sk.plans.remedial : sk.plans.enrich).slice(0,3);
+    return {skill:sk.name, score:v, cls:c, planType, lines};
+  });
+
+  const weak = items.filter(x=>x.cls.label==="دون المتوسط");
+  const strong = items.filter(x=>x.score!=null && isMastery(x.score));
+
+  document.getElementById("studentPlanView").innerHTML = `
+    <div class="card flat">
+      <div class="title"><h2>خطة للطالبة: <span class="tag">${esc(st?.name||"")}</span></h2><span class="tag">الفترة ${term}</span></div>
+      <div class="row">
+        <span class="tag">ضعف (🔴): <b>${weak.length}</b></span>
+        <span class="tag">إتقان (⭐): <b>${strong.length}</b></span>
+      </div>
+      <div style="height:10px"></div>
+      ${items.map(it=>`
+        <div class="card flat" style="margin-bottom:10px">
+          <div class="title">
+            <h2>${esc(it.skill)}</h2>
+            <span class="tag">${it.cls.icon} ${it.cls.label} ${it.score==null?"":("— "+it.score+"/100")}</span>
+          </div>
+          <div class="hint">
+            <b>${it.planType==="remedial"?"خطة علاجية مقترحة":"خطة إثرائية مقترحة"}:</b><br>
+            ${it.lines.map(x=>"• "+esc(x)).join("<br>")}
+          </div>
+        </div>
+      `).join("")}
+    </div>
+  `;
+}
+
+/* =========================
+   AWARDS
+========================= */
+function studentAvg(studentId, term){
+  const vals=[];
+  for(const sk of state.skills){
+    const g=state.grades[gKey(studentId, sk.id)];
+    const v=term===1 ? g?.t1 : g?.t2;
+    if(v!=null) vals.push(v);
+  }
+  return avg(vals);
+}
+function generateAwards(){
+  const classId = valSel("aClass");
+  const type = valSel("aType");
+  if(!classId) return alert("اختاري فصل");
+  const c=state.classes.find(x=>x.id===classId);
+  const students=state.students.filter(s=>s.classId===classId);
+  if(!students.length) return alert("لا توجد طالبات");
+  if(!state.skills.length) return alert("لا توجد مهارات");
+
+  const rows = students.map(st=>{
+    const a1=studentAvg(st.id,1);
+    const a2=studentAvg(st.id,2);
+    const imp=(a1!=null && a2!=null)? (a2-a1): null;
+    return {st, a1, a2, imp};
+  });
+
+  let winners=[];
+  if(type==="top"){
+    winners = rows.filter(r=>r.a2!=null).sort((a,b)=>b.a2-a.a2).slice(0,3);
+  }else if(type==="improve"){
+    winners = rows.filter(r=>r.imp!=null).sort((a,b)=>b.imp-a.imp).slice(0,3);
+  }else{
+    winners = rows.filter(r=>r.a2!=null && r.a2>=state.meta.thresholds.mastery).sort((a,b)=>b.a2-a.a2).slice(0,10);
+  }
+
+  const cert = (name, subtitle)=>`
+    <div class="card flat" style="border:3px solid var(--gold); margin-bottom:12px; text-align:center; padding:18px">
+      <div style="font-weight:900;font-size:20px">شهادة تكريم</div>
+      <div class="muted" style="margin-top:6px">تُمنح للطالبة</div>
+      <div style="font-weight:900;font-size:22px;margin-top:6px">${esc(name)}</div>
+      <div style="margin-top:8px">${esc(subtitle)}</div>
+      <div style="margin-top:12px" class="muted">
+        المعلمة: ${esc(state.meta.teacher||"—")} — المديرة: ${esc(state.meta.leader||"—")}
+        <br>المدرسة: ${esc(state.meta.school||"—")} — العام: ${esc(state.meta.year||"—")}
+      </div>
+    </div>
+  `;
+
+  const subtitle =
+    type==="top" ? "لتفوقها وحصولها على أعلى معدل في الفترة الثانية." :
+    type==="improve" ? "لتحسنها الملحوظ بين الفترتين." :
+    `لتحقيقها مستوى الإتقان (≥ ${state.meta.thresholds.mastery}).`;
+
+  document.getElementById("awardsView").innerHTML = `
+    <div class="card flat">
+      <div class="title"><h2>قائمة التكريم — ${esc(c?.name||"")}</h2><span class="tag">قابلة للطباعة</span></div>
+      ${winners.length? winners.map(w=>cert(w.st.name, subtitle)).join("") : `<div class="hint">لا توجد بيانات كافية لهذا النوع من التكريم.</div>`}
+    </div>
+  `;
+}
+
+/* =========================
+   QUIZ (MCQ) from skills
+========================= */
+function generateQuiz(){
+  const unitId = valSel("qUnit");
+  const lessonId = valSel("qLesson");
+  const n = Math.max(3, Math.min(25, Number(document.getElementById("qCount").value||10)));
+
+  if(!unitId) return alert("اختاري وحدة");
+  const skills = state.skills.filter(s=>s.unitId===unitId && (!lessonId || s.lessonId===lessonId));
+  if(!skills.length) return alert("لا توجد مهارات مرتبطة بهذا الاختيار");
+
+  const qs=[];
+  const pool=[...skills];
+  shuffle(pool);
+
+  const templates = [
+    (sk)=>({
+      q:`اختر الإجابة الصحيحة: المقصود بـ "${sk.name}" هو...`,
+      opts:["تعريف صحيح (يُعدّل)", "خيار 2", "خيار 3", "خيار 4"],
+      ans:0
+    }),
+    (sk)=>({
+      q:`أي العبارات التالية تُعد مثالًا على "${sk.name}"؟`,
+      opts:["مثال 1 (يُعدّل)", "مثال 2", "مثال 3", "مثال 4"],
+      ans:0
+    }),
+    (sk)=>({
+      q:`ما الحكم/النتيجة الأقرب ارتباطًا بـ "${sk.name}"؟`,
+      opts:["إجابة (تُعدّل)", "خيار 2", "خيار 3", "خيار 4"],
+      ans:0
+    })
+  ];
+
+  for(let i=0;i<n;i++){
+    const sk = pool[i % pool.length];
+    const t = templates[i % templates.length](sk);
+    qs.push(t);
+  }
+
+  const html = qs.map((x,idx)=>`
+    <div class="card flat" style="margin-bottom:10px">
+      <div class="title">
+        <h2>س${idx+1}: <span contenteditable="true">${esc(x.q)}</span></h2>
+        <span class="tag">MCQ</span>
+      </div>
+      <div class="muted">عدّلي الخيارات إن رغبتِ</div>
+      <div style="margin-top:8px">
+        ${x.opts.map((o,i)=>`
+          <div style="display:flex;gap:10px;align-items:center;margin:6px 0">
+            <span class="tag">${String.fromCharCode(65+i)}</span>
+            <div contenteditable="true" style="flex:1; border:1px solid var(--line); border-radius:12px; padding:8px">${esc(o)}</div>
+          </div>
+        `).join("")}
+      </div>
+      <div class="hint"><b>الإجابة الصحيحة (قابلة للتعديل):</b> <span contenteditable="true">${String.fromCharCode(65+x.ans)}</span></div>
+    </div>
+  `).join("");
+
+  document.getElementById("quizView").innerHTML = `
+    <div class="card flat">
+      <div class="title"><h2>المسابقة</h2><span class="tag">عدد الأسئلة: ${n}</span></div>
+      ${html}
+    </div>
+  `;
+}
+
+/* =========================
+   SOURCES
+========================= */
+function seedSources(){
+  const defaults = [
+    {name:"منصة مدرستي", url:"https://schools.madrasati.sa/"},
+    {name:"بوابة عين", url:"https://ien.edu.sa/"},
+    {name:"وزارة التعليم", url:"https://www.moe.gov.sa/"},
+  ];
+  for(const d of defaults){
+    if(!state.sources.some(s=>s.name===d.name)) state.sources.push({id:uid(), ...d});
+  }
+  saveSilent(); refreshAll();
+}
+function addSource(){
+  const name = prompt("اسم المصدر:");
+  if(!name) return;
+  const url = prompt("الرابط:", "https://");
+  state.sources.push({id:uid(), name, url:url||""});
+  saveSilent(); refreshAll();
+}
+function delSource(id){
+  if(!confirm("حذف المصدر؟")) return;
+  state.sources = state.sources.filter(s=>s.id!==id);
+  saveSilent(); refreshAll();
+}
+function editSource(id, field, v){
+  const s=state.sources.find(x=>x.id===id); if(!s) return;
+  s[field]=v; saveSilent();
+}
+
+/* =========================
+   RENDER VIEWS
+========================= */
+function refreshAll(){
+  // KPIs
+  document.getElementById("kpiClasses").textContent = state.classes.length;
+  document.getElementById("kpiStudents").textContent = state.students.length;
+  document.getElementById("kpiSkills").textContent = state.skills.length;
+  document.getElementById("kpiUnits").textContent = state.curriculum.units.length;
+
+  // selects
+  fillSelect("cSel", state.classes, "اختر فصل");
+  fillSelect("gClass", state.classes, "اختر فصل");
+  fillSelect("pClass", state.classes, "اختر فصل");
+  fillSelect("rClass", state.classes, "اختر فصل");
+  fillSelect("aClass", state.classes, "اختر فصل");
+
+  fillSelect("uSel", state.curriculum.units, "اختر وحدة");
+  fillSelect("skUnit", state.curriculum.units, "اختر وحدة");
+  fillSelect("qUnit", state.curriculum.units, "اختر وحدة");
+
+  syncLessonSelect("skLesson", valSel("skUnit"), true);
+  syncLessonSelect("qLesson", valSel("qUnit"), false);
+
+  fillSelect("gSkill", state.skills.map(s=>({id:s.id,name:s.name})), "اختر مهارة");
+
+  renderClassesView();
+  renderCurrView();
+  renderSkillsView();
+  renderPlansView();
+  renderSourcesView();
+
+  // student select for plan
+  syncStudentsForClass("pStudent", valSel("pClass"));
+}
+
+function fillSelect(id, items, placeholder){
+  const el=document.getElementById(id);
+  if(!el) return;
+  const cur=el.value;
+  el.innerHTML = `<option value="">${placeholder}</option>` + (items||[]).map(it=>`<option value="${it.id}">${esc(it.name||"")}</option>`).join("");
+  if(cur && [...el.options].some(o=>o.value===cur)) el.value=cur;
+}
+
+function syncLessonSelect(lessonSelectId, unitId, forceAny){
+  const el = document.getElementById(lessonSelectId);
+  if(!el) return;
+  const u = state.curriculum.units.find(x=>x.id===unitId);
+  const lessons = u?.lessons || [];
+  const cur=el.value;
+  el.innerHTML = (forceAny? `<option value="">اختر درس</option>` : `<option value="">كل الدروس</option>`)
+    + lessons.map(l=>`<option value="${l.id}">${esc(l.name)}</option>`).join("");
+  if(cur && [...el.options].some(o=>o.value===cur)) el.value=cur;
+}
+
+document.getElementById("skUnit").addEventListener("change", ()=>syncLessonSelect("skLesson", valSel("skUnit"), true));
+document.getElementById("qUnit").addEventListener("change", ()=>syncLessonSelect("qLesson", valSel("qUnit"), false));
+document.getElementById("pClass").addEventListener("change", ()=>syncStudentsForClass("pStudent", valSel("pClass")));
+
+function syncStudentsForClass(selectId, classId){
+  const el=document.getElementById(selectId);
+  if(!el) return;
+  const studs = state.students.filter(s=>s.classId===classId);
+  const cur=el.value;
+  el.innerHTML = `<option value="">اختر طالبة</option>` + studs.map(s=>`<option value="${s.id}">${esc(s.name)}</option>`).join("");
+  if(cur && [...el.options].some(o=>o.value===cur)) el.value=cur;
+}
+
+function renderClassesView(){
+  const wrap=document.getElementById("classesView");
+  if(!wrap) return;
+  if(!state.classes.length){
+    wrap.innerHTML = `<div class="hint">لا توجد فصول بعد.</div>`;
+    return;
+  }
+  wrap.innerHTML = state.classes.map(c=>{
+    const studs=state.students.filter(s=>s.classId===c.id);
+    return `
+      <div class="card flat" style="margin-bottom:12px">
+        <div class="title">
+          <h2>🏫 <input value="${escAttr(c.name)}" oninput="editClassName('${c.id}', this.value)" style="font-weight:900"/></h2>
+          <button class="btn danger" onclick="deleteClass('${c.id}')">حذف الفصل</button>
+        </div>
+        <table>
+          <thead><tr><th>الطالبة</th><th>حذف</th></tr></thead>
+          <tbody>
+            ${
+              studs.length ? studs.map(s=>`
+                <tr>
+                  <td><input value="${escAttr(s.name)}" oninput="editStudentName('${s.id}', this.value)"/></td>
+                  <td><button class="btn danger" onclick="deleteStudent('${s.id}')">حذف</button></td>
+                </tr>
+              `).join("")
+              : `<tr><td colspan="2" class="muted">لا توجد طالبات في هذا الفصل.</td></tr>`
+            }
+          </tbody>
+        </table>
+      </div>
+    `;
+  }).join("");
+}
+
+function renderCurrView(){
+  const wrap=document.getElementById("currView");
+  if(!wrap) return;
+  if(!state.curriculum.units.length){
+    wrap.innerHTML = `<div class="hint">لا توجد وحدات. اضغطي “توليد وحدات افتراضية” أو أضيفي يدويًا.</div>`;
+    return;
+  }
+  wrap.innerHTML = state.curriculum.units.map(u=>`
+    <div class="card flat" style="margin-bottom:12px">
+      <div class="title">
+        <h2>📘 <input value="${escAttr(u.name)}" oninput="editUnitName('${u.id}', this.value)" style="font-weight:900"/></h2>
+        <button class="btn danger" onclick="deleteUnit('${u.id}')">حذف الوحدة</button>
+      </div>
+      <table>
+        <thead><tr><th>الدرس</th><th>حذف</th></tr></thead>
+        <tbody>
+          ${(u.lessons||[]).map(l=>`
+            <tr>
+              <td><input value="${escAttr(l.name)}" oninput="editLessonName('${u.id}','${l.id}', this.value)"/></td>
+              <td><button class="btn danger" onclick="deleteLesson('${u.id}','${l.id}')">حذف</button></td>
+            </tr>
+          `).join("") || `<tr><td colspan="2" class="muted">لا توجد دروس.</td></tr>`}
+        </tbody>
+      </table>
+    </div>
+  `).join("");
+}
+
+function renderSkillsView(){
+  const wrap=document.getElementById("skillsView");
+  if(!wrap) return;
+  if(!state.skills.length){
+    wrap.innerHTML = `<div class="hint">لا توجد مهارات. استخدمي “توليد مهارات افتراضية” أو أضيفي يدويًا.</div>`;
+    return;
+  }
+  // group by unit -> lesson
+  const byUnit = groupBy(state.skills, s=>s.unitId);
+  const html = Object.keys(byUnit).map(unitId=>{
+    const u=state.curriculum.units.find(x=>x.id===unitId);
+    const byLesson=groupBy(byUnit[unitId], s=>s.lessonId);
+    const lessonBlocks = Object.keys(byLesson).map(lessonId=>{
+      const l=u?.lessons?.find(x=>x.id===lessonId);
+      const list=byLesson[lessonId];
+      return `
+        <div class="card flat" style="margin-bottom:10px">
+          <div class="title"><h2>📗 ${esc(l?.name||"درس")}</h2><span class="tag">${list.length} مهارة</span></div>
+          <table>
+            <thead><tr><th>المهارة</th><th>حذف</th></tr></thead>
+            <tbody>
+              ${list.map(sk=>`
+                <tr>
+                  <td><input value="${escAttr(sk.name)}" oninput="editSkillName('${sk.id}', this.value)"/></td>
+                  <td><button class="btn danger" onclick="deleteSkill('${sk.id}')">حذف</button></td>
+                </tr>
+              `).join("")}
+            </tbody>
+          </table>
+        </div>
+      `;
+    }).join("");
+    return `
+      <div class="card flat" style="margin-bottom:12px">
+        <div class="title"><h2>📘 ${esc(u?.name||"وحدة")}</h2><span class="tag">مهارات الوحدة</span></div>
+        ${lessonBlocks}
+      </div>
+    `;
+  }).join("");
+  wrap.innerHTML = html;
+}
+
+function renderPlansView(){
+  const wrap=document.getElementById("plansView");
+  if(!wrap) return;
+  if(!state.skills.length){
+    wrap.innerHTML = `<div class="hint">لا توجد مهارات حتى تُعرض الخطط.</div>`;
+    return;
+  }
+  wrap.innerHTML = state.skills.map(sk=>{
+    const u=state.curriculum.units.find(x=>x.id===sk.unitId);
+    const l=u?.lessons?.find(x=>x.id===sk.lessonId);
+    const rem = (sk.plans?.remedial||[]).map((p,i)=>`
+      <div class="row" style="align-items:center">
+        <input value="${escAttr(p)}" oninput="editPlan('${sk.id}','remedial',${i},this.value)"/>
+        <button class="btn danger" onclick="delPlanLine('${sk.id}','remedial',${i})">حذف</button>
+      </div>
+    `).join("");
+    const enr = (sk.plans?.enrich||[]).map((p,i)=>`
+      <div class="row" style="align-items:center">
+        <input value="${escAttr(p)}" oninput="editPlan('${sk.id}','enrich',${i},this.value)"/>
+        <button class="btn danger" onclick="delPlanLine('${sk.id}','enrich',${i})">حذف</button>
+      </div>
+    `).join("");
+
+    return `
+      <div class="card flat" style="margin-bottom:12px">
+        <div class="title">
+          <h2>🧠 ${esc(sk.name)}</h2>
+          <span class="tag">${esc(u?.name||"")} • ${esc(l?.name||"")}</span>
+        </div>
+        <div class="two">
+          <div>
+            <div class="title"><h2>🩺 علاجية</h2><span class="muted">قابلة للتعديل</span></div>
+            ${rem}
+            <div class="row"><button class="btn secondary" onclick="addPlanLine('${sk.id}','remedial')">➕ إضافة بند</button></div>
+          </div>
+          <div>
+            <div class="title"><h2>🚀 إثرائية</h2><span class="muted">قابلة للتعديل</span></div>
+            ${enr}
+            <div class="row"><button class="btn secondary" onclick="addPlanLine('${sk.id}','enrich')">➕ إضافة بند</button></div>
+          </div>
+        </div>
+      </div>
+    `;
+  }).join("");
+}
+
+function renderSourcesView(){
+  const wrap=document.getElementById("sourcesView");
+  if(!wrap) return;
+  if(!state.sources.length){
+    wrap.innerHTML = `<div class="hint">لا توجد مصادر. اضغطي “إضافة مصادر افتراضية”.</div>`;
+    return;
+  }
+  wrap.innerHTML = `
+    <table>
+      <thead><tr><th>المصدر</th><th>الرابط</th><th>فتح</th><th>حذف</th></tr></thead>
+      <tbody>
+        ${state.sources.map(s=>`
+          <tr>
+            <td><input value="${escAttr(s.name)}" oninput="editSource('${s.id}','name',this.value)"/></td>
+            <td><input value="${escAttr(s.url||"")}" oninput="editSource('${s.id}','url',this.value)" placeholder="https://"/></td>
+            <td>${s.url? `<a class="btn secondary" href="${escAttr(s.url)}" target="_blank" rel="noopener">فتح</a>` : `<span class="muted">—</span>`}</td>
+            <td><button class="btn danger" onclick="delSource('${s.id}')">حذف</button></td>
+          </tr>
+        `).join("")}
+      </tbody>
+    </table>
+  `;
+}
+
+/* =========================
+   WORD EXPORT (Official)
+========================= */
+async function exportWord(){
+  saveSilent(); // لا نزعجك بتنبيه
+  const { Document, Packer, Paragraph, TextRun, HeadingLevel } = window.docx;
+
+  const h = (t)=>new Paragraph({text:t, heading: HeadingLevel.HEADING_2});
+  const p = (t)=>new Paragraph({children:[new TextRun({text:t})]});
+
+  const docChildren = [];
+
+  docChildren.push(new Paragraph({text: state.meta.title || "منصة الإتقان الذكي", heading: HeadingLevel.HEADING_1}));
+  docChildren.push(p(`العام: ${state.meta.year||"—"} | المدرسة: ${state.meta.school||"—"}`));
+  docChildren.push(p(`المعلمة: ${state.meta.teacher||"—"} | المديرة: ${state.meta.leader||"—"}`));
+  docChildren.push(p(`المرحلة: ${state.meta.stage||"—"} | الصف/المستوى: ${state.meta.grade||"—"} | المادة: ${state.meta.subject||"—"}`));
+  docChildren.push(p(`الهدف: ${state.meta.goal||"—"}`));
+  docChildren.push(p(" "));
+
+  docChildren.push(h("الفصول والطالبات"));
+  if(!state.classes.length){
+    docChildren.push(p("لا توجد فصول."));
+  }else{
+    for(const c of state.classes){
+      docChildren.push(p(`• ${c.name}`));
+      const studs = state.students.filter(s=>s.classId===c.id);
+      if(!studs.length) docChildren.push(p("  - لا توجد طالبات."));
+      else studs.forEach(s=>docChildren.push(p(`  - ${s.name}`)));
+    }
+  }
+  docChildren.push(p(" "));
+
+  docChildren.push(h("الوحدات والدروس"));
+  if(!state.curriculum.units.length){
+    docChildren.push(p("لا توجد وحدات."));
+  }else{
+    for(const u of state.curriculum.units){
+      docChildren.push(p(`• ${u.name}`));
+      if(!u.lessons?.length) docChildren.push(p("  - لا توجد دروس."));
+      else u.lessons.forEach(l=>docChildren.push(p(`  - ${l.name}`)));
+    }
+  }
+  docChildren.push(p(" "));
+
+  docChildren.push(h("المهارات والخطط"));
+  if(!state.skills.length){
+    docChildren.push(p("لا توجد مهارات."));
+  }else{
+    for(const sk of state.skills){
+      docChildren.push(p(`• ${sk.name}`));
+      docChildren.push(p("  - علاجية:"));
+      (sk.plans?.remedial?.length? sk.plans.remedial : ["لا يوجد"]).forEach(x=>docChildren.push(p(`    • ${x}`)));
+      docChildren.push(p("  - إثرائية:"));
+      (sk.plans?.enrich?.length? sk.plans.enrich : ["لا يوجد"]).forEach(x=>docChildren.push(p(`    • ${x}`)));
+    }
+  }
+  docChildren.push(p(" "));
+
+  docChildren.push(h("المصادر"));
+  if(!state.sources.length){
+    docChildren.push(p("لا توجد مصادر."));
+  }else{
+    state.sources.forEach(s=>docChildren.push(p(`• ${s.name}${s.url? " — "+s.url:""}`)));
+  }
+
+  docChildren.push(p(" "));
+  docChildren.push(p(state.meta.copyright || "© كل الحقوق محفوظة"));
+
+  const doc = new Document({ sections:[{ children: docChildren }] });
+  const blob = await Packer.toBlob(doc);
+  saveAs(blob, `${(state.meta.title||"platform")}_${state.meta.year||""}.docx`);
+}
+
+/* =========================
+   UTILS
+========================= */
+function esc(s){ return String(s??"").replace(/[&<>"']/g, m=>({ "&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;" }[m])); }
+function escAttr(s){ return esc(s).replace(/"/g,"&quot;"); }
+function fmt(v){ return (v==null || isNaN(v)) ? "—" : Number(v).toFixed(1); }
+function groupBy(arr, fn){
+  return arr.reduce((acc,x)=>{
+    const k=fn(x);
+    acc[k]=acc[k]||[];
+    acc[k].push(x);
+    return acc;
+  },{});
+}
+function shuffle(a){
+  for(let i=a.length-1;i>0;i--){
+    const j=Math.floor(Math.random()*(i+1));
+    [a[i],a[j]]=[a[j],a[i]];
+  }
+  return a;
+}
+
+/* =========================
+   INIT
+========================= */
+load();
+</script>
+
+</body>
+</html>
