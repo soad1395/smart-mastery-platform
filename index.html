@@ -1,217 +1,185 @@
- <!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="ar" dir="rtl">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>منصة الإتقان الذكي - النسخة النهائية الشاملة</title>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
+    <title>منصة الإنجاز الذكية</title>
+    
+    <link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@400;700&display=swap" rel="stylesheet">
+    
     <style>
-        :root { --primary: #2f6f44; --bg: #eef3ef; --white: #fff; --accent: #d4af37; --link: #2980b9; }
-        body { font-family: 'Segoe UI', Tahoma, sans-serif; background: var(--bg); margin: 0; padding-bottom: 50px; }
-        
-        /* الهيدر العلوي */
-        .top-bar { background: var(--primary); color: white; padding: 20px; text-align: center; border-bottom: 4px solid var(--accent); }
-        .tools-bar { display: flex; flex-wrap: wrap; justify-content: center; gap: 8px; margin: 10px 0; }
-        .tool-btn { background: rgba(255,255,255,0.15); border: 1px solid rgba(255,255,255,0.3); color: white; padding: 6px 12px; border-radius: 8px; cursor: pointer; font-size: 13px; }
+        :root {
+            --primary-color: #003366; /* أزرق ملكي */
+            --accent-color: #D4AF37;  /* ذهبي */
+            --bg-color: #f4f7f9;
+        }
 
-        /* شريط التنقل الرئيسي */
-        .nav-menu { display: flex; flex-wrap: wrap; justify-content: center; gap: 10px; padding: 15px; background: white; box-shadow: 0 2px 10px rgba(0,0,0,0.05); position: sticky; top: 0; z-index: 100; }
-        .nav-item { padding: 8px 18px; border-radius: 20px; border: 1.5px solid #ddd; cursor: pointer; font-weight: bold; font-size: 13px; transition: 0.3s; }
-        .nav-active { background: var(--primary); color: white; border-color: var(--primary); }
+        body {
+            font-family: 'Tajawal', sans-serif;
+            background-color: var(--bg-color);
+            margin: 0;
+            padding: 20px;
+            color: var(--primary-color);
+        }
 
-        .container { max-width: 1100px; margin: 20px auto; padding: 0 15px; }
+        .container {
+            max-width: 900px;
+            margin: 0 auto;
+            background: white;
+            padding: 30px;
+            border-radius: 15px;
+            box-shadow: 0 10px 25px rgba(0,0,0,0.1);
+            border-top: 5px solid var(--accent-color);
+        }
 
-        /* البطاقات */
-        .dash-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 15px; margin-bottom: 25px; }
-        .stat-card { background: white; padding: 20px; border-radius: 12px; text-align: center; box-shadow: 0 4px 6px rgba(0,0,0,0.03); border-bottom: 3px solid var(--primary); }
-        .stat-card h2 { margin: 0; font-size: 28px; }
+        h1 {
+            text-align: center;
+            color: var(--primary-color);
+            border-bottom: 2px solid var(--accent-color);
+            padding-bottom: 10px;
+        }
 
-        .section { display: none; background: white; padding: 25px; border-radius: 15px; box-shadow: 0 10px 30px rgba(0,0,0,0.05); }
-        .active-section { display: block; animation: fadeIn 0.4s; }
+        .input-section {
+            display: grid;
+            gap: 15px;
+            margin-top: 20px;
+        }
 
-        /* الألعاب والمصادر */
-        .game-card { border: 1px solid #eee; padding: 15px; border-radius: 12px; display: flex; align-items: center; gap: 15px; margin-bottom: 10px; transition: 0.3s; text-decoration: none; color: inherit; }
-        .game-card:hover { background: #f0f7f2; transform: scale(1.02); }
-        .game-icon { font-size: 30px; }
+        input, textarea, select {
+            width: 100%;
+            padding: 12px;
+            border: 1px solid #ddd;
+            border-radius: 8px;
+            font-family: 'Tajawal';
+            font-size: 16px;
+        }
 
-        input, select, textarea { width: 100%; padding: 12px; margin: 8px 0; border: 1px solid #ddd; border-radius: 10px; }
-        .btn-main { background: var(--primary); color: white; border: none; padding: 12px; border-radius: 10px; cursor: pointer; width: 100%; font-weight: bold; }
-        
-        @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
+        button {
+            background-color: var(--primary-color);
+            color: white;
+            padding: 12px 25px;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            font-weight: bold;
+            transition: 0.3s;
+        }
+
+        button:hover {
+            background-color: #002244;
+            transform: translateY(-2px);
+        }
+
+        .data-display {
+            margin-top: 40px;
+            border-collapse: collapse;
+            width: 100%;
+        }
+
+        .data-item {
+            background: #fff;
+            border: 1px solid #eee;
+            padding: 15px;
+            margin-bottom: 10px;
+            border-right: 5px solid var(--accent-color);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .status-badge {
+            background: var(--accent-color);
+            color: white;
+            padding: 3px 10px;
+            border-radius: 20px;
+            font-size: 12px;
+        }
     </style>
 </head>
 <body>
 
-<div class="top-bar">
-    <div style="font-size: 24px; font-weight: bold;">منصة الإتقان الذكي ✔</div>
-    <div class="tools-bar">
-        <div class="tool-btn" onclick="window.print()">🖨️ طباعة PDF</div>
-        <div class="tool-btn" onclick="exportAllToWord()">📝 تصدير التقارير Word</div>
-    </div>
-</div>
-
-<div class="nav-menu">
-    <div class="nav-item nav-active" onclick="showSec('home', this)">🏠 الرئيسية</div>
-    <div class="nav-item" onclick="showSec('students', this)">🏫 الطالبات</div>
-    <div class="nav-item" onclick="showSec('grading', this)">✍️ الدرجات</div>
-    <div class="nav-item" onclick="showSec('messages', this)">✉️ المراسلات</div>
-    <div class="nav-item" onclick="showSec('games', this)">🎮 الألعاب والمصادر</div>
-    <div class="nav-item" onclick="showSec('config', this)">⚙️ الإعدادات</div>
-</div>
-
 <div class="container">
-    <div class="dash-grid">
-        <div class="stat-card"><h2 id="s-cls">9</h2><p>عدد الفصول</p></div>
-        <div class="stat-card"><h2 id="s-total">32</h2><p>عدد الطالبات</p></div>
-        <div class="stat-card"><h2>7</h2><p>الوحدات الدراسية</p></div>
-        <div class="stat-card"><h2 id="s-avg">0%</h2><p>نسبة الإتقان</p></div>
+    <h1>منصة توثيق الإنجازات الدائمة</h1>
+    
+    <div class="input-section">
+        <input type="text" id="studentName" placeholder="اسم الطالبة / المبادرة">
+        <select id="category">
+            <option value="إنجاز">نوع المشاركة: إنجاز</option>
+            <option value="موهبة">نوع المشاركة: موهبة</option>
+            <option value="تكريم">نوع المشاركة: تكريم</option>
+        </select>
+        <textarea id="details" rows="4" placeholder="تفاصيل العمل أو الملاحظات..."></textarea>
+        <button onclick="saveData()">حفظ البيانات بشكل دائم</button>
     </div>
 
-    <div id="home" class="section active-section">
-        <div style="background: #e7f3eb; padding: 15px; border-radius: 10px; border-right: 5px solid var(--primary);">
-            <strong>طريقة العمل لكل فصل لوحده:</strong> 1) أضيفي الفصل ← 2) أضيفي طالباته ← 3) اختاري الفصل في صفحة الدرجات ← يظهر لك نفس طالبات هذا الفصل فقط.
+    <div id="savedContent" class="data-list">
         </div>
-        <h3 style="margin-top:20px;">📜 مهارات المنهج المستهدفة</h3>
-        <ul id="skills-list">
-            <li>وحدة 1: مهارات الاستماع والتحدث الأساسية.</li>
-            <li>وحدة 2: القراءة والاستيعاب القرائي.</li>
-            <li>وحدة 3: التراكيب اللغوية والظواهر الإملائية.</li>
-            <li>وحدات 4-7: التعبير الكتابي والمشاريع الإبداعية.</li>
-        </ul>
-    </div>
-
-    <div id="students" class="section">
-        <h3>🏫 إدارة الفصول</h3>
-        <input type="text" id="new-cls" placeholder="اسم الفصل الجديد">
-        <textarea id="new-names" rows="5" placeholder="أدخل أسماء الطالبات هنا (كل اسم في سطر)"></textarea>
-        <button class="btn-main" onclick="addBulk()">حفظ وإضافة</button>
-    </div>
-
-    <div id="grading" class="section">
-        <h3>✍️ رصد الدرجات</h3>
-        <select id="sel-st"></select>
-        <div style="display: flex; gap:10px;">
-            <input type="number" id="v-60" placeholder="الاختبار (60)">
-            <input type="number" id="v-40" placeholder="المهمات (40)">
-        </div>
-        <button class="btn-main" onclick="saveGrade()">حفظ الدرجة</button>
-    </div>
-
-    <div id="messages" class="section">
-        <h3>✉️ رسائل التواصل الجاهزة</h3>
-        <div id="msg-container"></div>
-    </div>
-
-    <div id="games" class="section">
-        <h3>🎮 ألعاب تعليمية تفاعلية (روابط حقيقية)</h3>
-        
-        <a href="https://wordwall.net/ar/community/%D9%85%D9%87%D8%A7%D8%B1%D8%A7%D8%AA-%D9%84%D8%BA%D8%AA%D9%8A" target="_blank" class="game-card">
-            <span class="game-icon">🎡</span>
-            <div><strong>Wordwall</strong><br><small>ألعاب عجلات دوارة ومسابقات ممتعة للمنهج</small></div>
-        </a>
-
-        <a href="https://quizizz.com/admin/search/%D9%84%D8%BA%D8%AA%D9%8A" target="_blank" class="game-card">
-            <span class="game-icon">⚡</span>
-            <div><strong>Quizizz</strong><br><small>اختبارات تنافسية مباشرة لرفع مستوى الإتقان</small></div>
-        </a>
-
-        <a href="https://www.ien.sa/" target="_blank" class="game-card" style="border-right-color: #2980b9;">
-            <span class="game-icon">📚</span>
-            <div><strong>بوابة عين الوطنية</strong><br><small>الكتب التفاعلية والدروس المسجلة للمنهج</small></div>
-        </a>
-
-        <h3 style="margin-top:20px;">🛠️ أدوات المعلمة</h3>
-        <button class="btn-main" style="background:#8e44ad;" onclick="generateQuiz()">🎲 توليد مسابقة سريعة من المنهج</button>
-        <div id="quiz-area" class="msg-box" style="display:none; margin-top:10px; background:#f9f9f9; padding:15px; border:1px dashed #ccc;"></div>
-    </div>
-
-    <div id="config" class="section">
-        <h3>⚙️ إعدادات التقارير</h3>
-        <input type="text" id="cfg-teacher" placeholder="اسم المعلمة">
-        <input type="text" id="cfg-sub" placeholder="المادة">
-        <input type="text" id="cfg-principal" placeholder="المديرة">
-        <button class="btn-main" onclick="save()">حفظ الإعدادات</button>
-    </div>
 </div>
+
+<script src="https://www.gstatic.com/firebasejs/9.6.1/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/9.6.1/firebase-database-compat.js"></script>
 
 <script>
-    let db = JSON.parse(localStorage.getItem('itqan_final_v3')) || {
-        cfg: { teacher: 'فاطمة', sub: 'لغتي الجميلة', principal: 'نورة' },
-        students: [],
-        grades: {}
+    // إعدادات Firebase (يجب وضع إعدادات حسابك هنا لضمان الملكية الخاصة)
+    const firebaseConfig = {
+        apiKey: "AIzaSy...",
+        authDomain: "your-app.firebaseapp.com",
+        databaseURL: "https://your-app.firebaseio.com",
+        projectId: "your-app",
+        storageBucket: "your-app.appspot.com",
+        messagingSenderId: "12345",
+        appId: "1:12345:web:6789"
     };
 
-    function showSec(id, btn) {
-        document.querySelectorAll('.section').forEach(s => s.classList.remove('active-section'));
-        document.querySelectorAll('.nav-item').forEach(i => i.classList.remove('nav-active'));
-        document.getElementById(id).classList.add('active-section');
-        btn.classList.add('nav-active');
-        refresh();
-    }
+    // بدء التشغيل
+    firebase.initializeApp(firebaseConfig);
+    const database = firebase.database();
 
-    function addBulk() {
-        const cls = document.getElementById('new-cls').value;
-        const names = document.getElementById('new-names').value.split('\n');
-        names.forEach(n => { if(n.trim()) db.students.push({name: n.trim(), cls: cls}); });
-        save();
-    }
+    // وظيفة الحفظ
+    function saveData() {
+        const name = document.getElementById('studentName').value;
+        const cat = document.getElementById('category').value;
+        const desc = document.getElementById('details').value;
 
-    function saveGrade() {
-        const s = document.getElementById('sel-st').value;
-        const total = Number(document.getElementById('v-60').value) + Number(document.getElementById('v-40').value);
-        db.grades[s] = total;
-        save();
-        alert("تم الحفظ!");
-    }
+        if(name === "") { alert("يرجى إدخال الاسم"); return; }
 
-    function save() {
-        db.cfg.teacher = document.getElementById('cfg-teacher').value;
-        db.cfg.sub = document.getElementById('cfg-sub').value;
-        db.cfg.principal = document.getElementById('cfg-principal').value;
-        localStorage.setItem('itqan_final_v3', JSON.stringify(db));
-        refresh();
-    }
-
-    function refresh() {
-        document.getElementById('s-total').innerText = db.students.length;
-        document.getElementById('s-cls').innerText = [...new Set(db.students.map(s => s.cls))].length || 0;
-        
-        document.getElementById('sel-st').innerHTML = db.students.map(s => `<option value="${s.name}">${s.name} (${s.cls})</option>`).join('');
-
-        let mHtml = '', totalG = 0;
-        db.students.forEach(s => {
-            const g = db.grades[s.name] || 0;
-            totalG += g;
-            let lvl = g >= 90 ? 'ممتاز' : g >= 75 ? 'جيد جداً' : g >= 60 ? 'جيد' : 'فاقد';
-            
-            mHtml += `<div style="padding:10px; border-bottom:1px solid #eee;">
-                <strong>الطالبة: ${s.name} (${lvl})</strong>
-                <p style="font-size:12px; color:#666;">رسالة: نود إفادتكم بأن مستوى ابنتكم في ${db.cfg.sub} هو ${lvl} بدرجة ${g}/100.</p>
-                <button class="tool-btn" style="color:var(--primary)" onclick="downloadMsg('${s.name}', '${lvl}', ${g})">📝 تصدير Word</button>
-            </div>`;
+        const newEntry = database.ref('entries').push();
+        newEntry.set({
+            name: name,
+            category: cat,
+            details: desc,
+            timestamp: Date.now()
+        }).then(() => {
+            alert("تم الحفظ في قاعدة البيانات بنجاح!");
+            document.getElementById('studentName').value = "";
+            document.getElementById('details').value = "";
         });
-        document.getElementById('msg-container').innerHTML = mHtml || 'لا يوجد طالبات.';
-        document.getElementById('s-avg').innerText = db.students.length ? Math.round(totalG/db.students.length) + '%' : '0%';
     }
 
-    function downloadMsg(name, lvl, g) {
-        const text = `خطاب رسمي\n\nإلى ولي أمر الطالبة: ${name}\nالموضوع: تقرير مستوى دراسي\n\nنفيدكم بأن ابنتكم حصلت في مادة ${db.cfg.sub} على مستوى (${lvl}) بمجموع درجات ${g}.\n\nالمعلمة: ${db.cfg.teacher}\nالمديرة: ${db.cfg.principal}`;
-        const blob = new Blob(['\ufeff', text], { type: 'application/msword' });
-        const link = document.createElement('a');
-        link.href = URL.createObjectURL(blob);
-        link.download = `تقرير_${name}.doc`;
-        link.click();
-    }
+    // جلب البيانات وعرضها (تحديث تلقائي)
+    database.ref('entries').on('value', (snapshot) => {
+        const dataList = document.getElementById('savedContent');
+        dataList.innerHTML = "<h3>السجلات المحفوظة:</h3>";
+        
+        snapshot.forEach((childSnapshot) => {
+            const data = childSnapshot.val();
+            dataList.innerHTML += `
+                <div class="data-item">
+                    <div>
+                        <strong>${data.name}</strong> <span class="status-badge">${data.category}</span>
+                        <p style="margin: 5px 0 0 0; color: #666;">${data.details}</p>
+                    </div>
+                    <button style="background:red; padding: 5px 10px;" onclick="deleteItem('${childSnapshot.key}')">حذف</button>
+                </div>
+            `;
+        });
+    });
 
-    function generateQuiz() {
-        const units = ["الوحدة الأولى: قدوات ومثل العليا", "الوحدة الثانية: الوعي القرائي", "الوحدة الثالثة: الوعي الصحي", "الوحدة الرابعة: منجزات وطنية"];
-        const randomUnit = units[Math.floor(Math.random() * units.length)];
-        const quizArea = document.getElementById('quiz-area');
-        quizArea.style.display = 'block';
-        quizArea.innerHTML = `<strong>🎲 مسابقة سريعة في: ${randomUnit}</strong><br>السؤال: استخرجي المبتدأ والخبر من الجملة التالية...<br><br><small>يمكنكِ نسخ هذا السؤال للطالبات الآن!</small>`;
+    function deleteItem(id) {
+        if(confirm("هل أنتِ متأكدة من الحذف؟")) {
+            database.ref('entries/' + id).remove();
+        }
     }
-
-    refresh();
 </script>
 
 </body>
