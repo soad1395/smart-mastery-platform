@@ -1,184 +1,160 @@
-<!DOCTYPE html>
+ <!DOCTYPE html>
 <html lang="ar" dir="rtl">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>منصة الإنجاز الذكية</title>
-    
-    <link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@400;700&display=swap" rel="stylesheet">
-    
+    <title>منصة إدارة الصف الذكية | Suad Al-Ghamdi</title>
+    <link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@300;500;700&display=swap" rel="stylesheet">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/docx/7.1.0/docx.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/FileSaver.js/2.0.5/FileSaver.min.js"></script>
     <style>
         :root {
-            --primary-color: #003366; /* أزرق ملكي */
-            --accent-color: #D4AF37;  /* ذهبي */
-            --bg-color: #f4f7f9;
+            --primary: #2c3e50; --secondary: #34495e; --accent: #2ecc71;
+            --gold: #D4AF37; --blue: #3498db; --red: #e74c3c;
         }
-
-        body {
-            font-family: 'Tajawal', sans-serif;
-            background-color: var(--bg-color);
-            margin: 0;
-            padding: 20px;
-            color: var(--primary-color);
-        }
-
-        .container {
-            max-width: 900px;
-            margin: 0 auto;
-            background: white;
-            padding: 30px;
-            border-radius: 15px;
-            box-shadow: 0 10px 25px rgba(0,0,0,0.1);
-            border-top: 5px solid var(--accent-color);
-        }
-
-        h1 {
-            text-align: center;
-            color: var(--primary-color);
-            border-bottom: 2px solid var(--accent-color);
-            padding-bottom: 10px;
-        }
-
-        .input-section {
-            display: grid;
-            gap: 15px;
-            margin-top: 20px;
-        }
-
-        input, textarea, select {
-            width: 100%;
-            padding: 12px;
-            border: 1px solid #ddd;
-            border-radius: 8px;
-            font-family: 'Tajawal';
-            font-size: 16px;
-        }
-
-        button {
-            background-color: var(--primary-color);
-            color: white;
-            padding: 12px 25px;
-            border: none;
-            border-radius: 8px;
-            cursor: pointer;
-            font-weight: bold;
-            transition: 0.3s;
-        }
-
-        button:hover {
-            background-color: #002244;
-            transform: translateY(-2px);
-        }
-
-        .data-display {
-            margin-top: 40px;
-            border-collapse: collapse;
-            width: 100%;
-        }
-
-        .data-item {
-            background: #fff;
-            border: 1px solid #eee;
-            padding: 15px;
-            margin-bottom: 10px;
-            border-right: 5px solid var(--accent-color);
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-        }
-
-        .status-badge {
-            background: var(--accent-color);
-            color: white;
-            padding: 3px 10px;
-            border-radius: 20px;
-            font-size: 12px;
-        }
+        body { font-family: 'Tajawal', sans-serif; background: var(--primary); color: white; margin: 0; padding: 20px; }
+        .grid-container { display: grid; grid-template-columns: repeat(auto-fill, minmax(200px, 1fr)); gap: 15px; margin-top: 20px; }
+        .card { background: var(--secondary); padding: 20px; border-radius: 12px; text-align: center; cursor: pointer; transition: 0.3s; border: 1px solid rgba(255,255,255,0.1); }
+        .card:hover { transform: translateY(-5px); border-color: var(--gold); }
+        .card i { font-size: 2rem; display: block; margin-bottom: 10px; }
+        
+        /* تصميم الأقسام */
+        .page-section { display: none; background: white; color: #333; padding: 25px; border-radius: 15px; margin-top: 20px; }
+        .active { display: block; }
+        
+        table { width: 100%; border-collapse: collapse; margin-top: 15px; }
+        th, td { border: 1px solid #ddd; padding: 10px; text-align: center; }
+        th { background: var(--secondary); color: white; }
+        
+        .btn { padding: 10px 20px; border: none; border-radius: 5px; cursor: pointer; font-weight: bold; }
+        .btn-save { background: var(--accent); color: white; }
+        .btn-print { background: var(--blue); color: white; }
+        
+        .stat-box { display: inline-block; width: 30%; padding: 15px; border-radius: 10px; color: white; margin: 1%; }
     </style>
 </head>
 <body>
 
-<div class="container">
-    <h1>منصة توثيق الإنجازات الدائمة</h1>
-    
-    <div class="input-section">
-        <input type="text" id="studentName" placeholder="اسم الطالبة / المبادرة">
-        <select id="category">
-            <option value="إنجاز">نوع المشاركة: إنجاز</option>
-            <option value="موهبة">نوع المشاركة: موهبة</option>
-            <option value="تكريم">نوع المشاركة: تكريم</option>
-        </select>
-        <textarea id="details" rows="4" placeholder="تفاصيل العمل أو الملاحظات..."></textarea>
-        <button onclick="saveData()">حفظ البيانات بشكل دائم</button>
+    <header style="text-align: center; border-bottom: 2px solid var(--gold); padding-bottom: 10px;">
+        <h2>منصة إدارة الصف والتحليل الإحصائي الذكي</h2>
+        <p>المرحلة الثانوية - نظام المسارات</p>
+    </header>
+
+    <div id="main-menu" class="grid-container">
+        <div class="card" onclick="showSection('basic-info')">📋 البيانات الأساسية</div>
+        <div class="card" onclick="showSection('students-mgt')">👥 إدارة الطالبات</div>
+        <div class="card" onclick="showSection('grades-entry')">📝 رصد الدرجات</div>
+        <div class="card" onclick="showSection('stats-analysis')">📊 التحليل الإحصائي</div>
+        <div class="card" onclick="showSection('auto-reports')">📄 التقارير التلقائية</div>
+        <div class="card" onclick="showSection('plans-gen')">🛠️ الخطط (علاجية/إثرائية)</div>
+        <div class="card" onclick="window.open('https://wordwall.net', '_blank')">🎮 الألعاب التعليمية</div>
+        <div class="card" onclick="showSection('upload-curriculum')">📚 رفع المنهج PDF</div>
     </div>
 
-    <div id="savedContent" class="data-list">
-        </div>
-</div>
+    <div id="grades-entry" class="page-section">
+        <h3>رصد درجات الفترة الأولى والثانية (من 100)</h3>
+        <table id="gradesTable">
+            <thead>
+                <tr>
+                    <th>اسم الطالبة</th>
+                    <th>الفترة الأولى</th>
+                    <th>الفترة الثانية</th>
+                    <th>المعدل تلقائي</th>
+                    <th>الحالة</th>
+                </tr>
+            </thead>
+            <tbody id="gradesBody">
+                </tbody>
+        </table>
+        <button class="btn btn-save" onclick="calculateGrades()">إجراء التحليل والحساب</button>
+        <button class="btn" onclick="showSection('main-menu')">رجوع</button>
+    </div>
 
-<script src="https://www.gstatic.com/firebasejs/9.6.1/firebase-app-compat.js"></script>
-<script src="https://www.gstatic.com/firebasejs/9.6.1/firebase-database-compat.js"></script>
+    <div id="auto-reports" class="page-section">
+        <h3>توليد التقارير الرسمية (Word)</h3>
+        <div id="reportPreview" style="background: #f9f9f9; padding: 20px; border: 1px dashed #ccc;">
+            <p>سيتم توليد التقرير بناءً على البيانات المرصودة تلقائياً...</p>
+        </div>
+        <button class="btn btn-print" onclick="generateWordReport()">تصدير Word للطباعة</button>
+    </div>
+
+    <div id="stats-analysis" class="page-section">
+        <h3>نتائج التحليل الإحصائي للفصل</h3>
+        <div class="stat-box" style="background: #27ae60;">متميز (أكثر من 85): <span id="highCount">0</span></div>
+        <div class="stat-box" style="background: #f1c40f;">متوسط (60-84): <span id="midCount">0</span></div>
+        <div class="stat-box" style="background: #e74c3c;">إخفاق (أقل من 60): <span id="lowCount">0</span></div>
+        <hr>
+        <h4>التوصيات المقترحة:</h4>
+        <ul id="recommendationsList"></ul>
+    </div>
 
 <script>
-    // إعدادات Firebase (يجب وضع إعدادات حسابك هنا لضمان الملكية الخاصة)
-    const firebaseConfig = {
-        apiKey: "AIzaSy...",
-        authDomain: "your-app.firebaseapp.com",
-        databaseURL: "https://your-app.firebaseio.com",
-        projectId: "your-app",
-        storageBucket: "your-app.appspot.com",
-        messagingSenderId: "12345",
-        appId: "1:12345:web:6789"
-    };
-
-    // بدء التشغيل
-    firebase.initializeApp(firebaseConfig);
-    const database = firebase.database();
-
-    // وظيفة الحفظ
-    function saveData() {
-        const name = document.getElementById('studentName').value;
-        const cat = document.getElementById('category').value;
-        const desc = document.getElementById('details').value;
-
-        if(name === "") { alert("يرجى إدخال الاسم"); return; }
-
-        const newEntry = database.ref('entries').push();
-        newEntry.set({
-            name: name,
-            category: cat,
-            details: desc,
-            timestamp: Date.now()
-        }).then(() => {
-            alert("تم الحفظ في قاعدة البيانات بنجاح!");
-            document.getElementById('studentName').value = "";
-            document.getElementById('details').value = "";
-        });
+    // نظام التنقل بين الأقسام
+    function showSection(id) {
+        if(id === 'main-menu') {
+            document.querySelectorAll('.page-section').forEach(s => s.classList.remove('active'));
+            document.getElementById('main-menu').style.display = 'grid';
+            return;
+        }
+        document.getElementById('main-menu').style.display = 'none';
+        document.querySelectorAll('.page-section').forEach(s => s.classList.remove('active'));
+        document.getElementById(id).classList.add('active');
     }
 
-    // جلب البيانات وعرضها (تحديث تلقائي)
-    database.ref('entries').on('value', (snapshot) => {
-        const dataList = document.getElementById('savedContent');
-        dataList.innerHTML = "<h3>السجلات المحفوظة:</h3>";
-        
-        snapshot.forEach((childSnapshot) => {
-            const data = childSnapshot.val();
-            dataList.innerHTML += `
-                <div class="data-item">
-                    <div>
-                        <strong>${data.name}</strong> <span class="status-badge">${data.category}</span>
-                        <p style="margin: 5px 0 0 0; color: #666;">${data.details}</p>
-                    </div>
-                    <button style="background:red; padding: 5px 10px;" onclick="deleteItem('${childSnapshot.key}')">حذف</button>
-                </div>
-            `;
-        });
-    });
+    // محرك الحساب التلقائي (المعدل + الحالة + التوصية)
+    function calculateGrades() {
+        let students = [
+            {name: "سارة محمد", p1: 95, p2: 98},
+            {name: "نورة علي", p1: 55, p2: 62}
+        ]; // هذه ستجلب من قاعدة البيانات لاحقاً
 
-    function deleteItem(id) {
-        if(confirm("هل أنتِ متأكدة من الحذف؟")) {
-            database.ref('entries/' + id).remove();
-        }
+        const tbody = document.getElementById('gradesBody');
+        tbody.innerHTML = "";
+        let high = 0, mid = 0, low = 0;
+
+        students.forEach(s => {
+            let avg = (s.p1 + s.p2) / 2;
+            let status = avg >= 60 ? "اجتياز" : "خطة علاجية";
+            if(avg >= 85) high++; else if(avg >= 60) mid++; else low++;
+
+            tbody.innerHTML += `<tr>
+                <td>${s.name}</td>
+                <td>${s.p1}</td>
+                <td>${s.p2}</td>
+                <td style="font-weight:bold">${avg}%</td>
+                <td>${status}</td>
+            </tr>`;
+        });
+
+        document.getElementById('highCount').innerText = high;
+        document.getElementById('midCount').innerText = mid;
+        document.getElementById('lowCount').innerText = low;
+        generateRecommendations(high, low);
+    }
+
+    function generateRecommendations(high, low) {
+        const list = document.getElementById('recommendationsList');
+        list.innerHTML = "";
+        if(high > 0) list.innerHTML += "<li>تعزيز الطالبات المتميزات بشهادات شكر رقمية.</li>";
+        if(low > 0) list.innerHTML += "<li>إلحاق الطالبات دون المتوسط بمجموعات التقوية الصباحية.</li>";
+        list.innerHTML += "<li>الاستمرار في استخدام استراتيجيات التعلم النشط.</li>";
+    }
+
+    // وظيفة تصدير ملف Word للتقارير
+    function generateWordReport() {
+        const doc = new docx.Document({
+            sections: [{
+                properties: {},
+                children: [
+                    new docx.Paragraph({ text: "تقرير أداء الطالبات - منصة الإنجاز", heading: docx.HeadingLevel.HEADING_1 }),
+                    new docx.Paragraph({ text: "بناءً على نتائج الفترة الأولى والثانية، تم تحليل المستوى وتوليد التوصيات تلقائياً." }),
+                ],
+            }],
+        });
+
+        docx.Packer.toBlob(doc).then(blob => {
+            saveAs(blob, "تقرير_الأداء.docx");
+        });
     }
 </script>
 
